@@ -1,4 +1,5 @@
 require("dotenv").config();
+const random_string = require("../../resources/random_string.js");
 const Setting = require("../../models/Setting.js");
 
 module.exports = settingCreate = (req, res, next) => {
@@ -19,6 +20,7 @@ module.exports = settingCreate = (req, res, next) => {
 
   // Save
   let settingToSave = { ...req.body };
+  settingToSave.settingid = random_string()
   settingToSave = new Setting(settingToSave);
 
   // Save

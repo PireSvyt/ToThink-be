@@ -1,4 +1,5 @@
 require("dotenv").config();
+const random_string = require("../../resources/random_string.js");
 const Task = require("../../models/Task.js");
 
 module.exports = taskCreate = (req, res, next) => {
@@ -19,6 +20,8 @@ module.exports = taskCreate = (req, res, next) => {
 
   // Save
   let taskToSave = { ...req.body };
+  taskToSave.userid = req.augmented.user.userid
+  taskToSave.taskid = random_string()
   taskToSave = new Task(taskToSave);
 
   // Save

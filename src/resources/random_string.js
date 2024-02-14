@@ -1,4 +1,4 @@
-module.exports = function random_string(length) {
+module.exports = function random_string(length = 12) {
     /*
     
     generates a random string
