@@ -38,7 +38,7 @@ app.use("/task", taskRoutes);
 
 // Landing
 app.get("/", (req, res) => {
-  res.send("<h1>MUSAcolor back end</h1>");
+  res.send("<h1>ToThink back end</h1>");
 });
 
 module.exports = app;
