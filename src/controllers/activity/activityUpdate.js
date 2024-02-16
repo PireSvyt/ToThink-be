@@ -28,7 +28,6 @@ module.exports = activityUpdate = (req, res, next) => {
   if (req.body.description !== undefined) {
     activityToSave.description = req.body.description
   }
-  console.log("activityToSave", activityToSave)
 
   Activity.updateOne({ 
     activityid: activityToSave.activityid
@@ -37,10 +36,8 @@ module.exports = activityUpdate = (req, res, next) => {
       console.log("activity.update.success.modified", activityToSave);
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
-        if (activityToSave[key] !== undefined) {
-          if (activityContract.activity[key] === 1) {
-            filteredActivity[key] = activityToSave[key]
-          }
+        if (activityContract.activity[key] === 1) {
+          filteredActivity[key] = activityToSave[key]
         }
       })
       return res.status(200).json({

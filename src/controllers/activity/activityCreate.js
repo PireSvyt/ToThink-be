@@ -33,10 +33,8 @@ module.exports = activityCreate = (req, res, next) => {
       console.log("activity.create.success", activityToSave);
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
-        if (activityToSave[key] !== undefined) {
-          if (activityContract.activity[key] === 1) {
-            filteredActivity[key] = activityToSave[key]
-          }
+        if (activityContract.activity[key] === 1) {
+          filteredActivity[key] = activityToSave[key]
         }
       })
       return res.status(201).json({
