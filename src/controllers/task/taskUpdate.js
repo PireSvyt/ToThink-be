@@ -35,11 +35,11 @@ module.exports = taskSave = (req, res, next) => {
       taskToSave.state = req.body.state
     }
   }
+  console.log("taskToSave", taskToSave)
 
   // Save
   Task.updateOne({ 
-    taskid: taskToSave.taskid,
-    owner: req.augmented.user.userid
+    taskid: taskToSave.taskid
   }, taskToSave)
     .then(() => {
       console.log("task.update.success.modified");
