@@ -20,6 +20,7 @@ module.exports = taskCreate = (req, res, next) => {
 
   // Save
   let taskToSave = { ...req.body }
+  activityToSave.taskid = random_id()
   taskToSave.owner = req.augmented.user.userid
   if (taskToSave.state === undefined) {
     taskToSave.state = "tothink"
