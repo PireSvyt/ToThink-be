@@ -17,7 +17,7 @@ module.exports = activityGetMany = (req, res, next) => {
 
   Activity.aggregate([
     {
-      $match: { userid: req.augmented.user.userid },
+      $match: { owner: req.augmented.user.userid },
     },
     {
       $lookup: {

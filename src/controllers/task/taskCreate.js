@@ -19,10 +19,10 @@ module.exports = taskCreate = (req, res, next) => {
   }
 
   // Save
-  let taskToSave = { ...req.body };
-  taskToSave.userid = req.augmented.user.userid
-  taskToSave.taskid = random_string()
-  taskToSave = new Task(taskToSave);
+  let taskToSave = new Activity();
+  taskToSave.taskid = taskToSave._id
+  taskToSave.owner = req.augmented.user.userid
+  taskToSave.activityid = req.augmented.user.userid
 
   // Save
   taskToSave

@@ -19,7 +19,7 @@ module.exports = taskGetMany = (req, res, next) => {
 
   Task.aggregate([
     {
-      $match: { userid: req.augmented.user.userid },
+      $match: { owner: req.augmented.user.userid },
     },
     {
       $lookup: {

@@ -19,11 +19,9 @@ module.exports = activityCreate = (req, res, next) => {
   }
 
   // Save
-  let activityToSave = { ...req.body };
-  activityToSave.userid = req.augmented.user.userid
-  activityToSave.activityid = random_string()
-  activityToSave = new Activity(activityToSave);
+  let activityToSave = new Activity();
   activityToSave.activityid = activityToSave._id
+  activityToSave.owner = req.augmented.user.userid
 
   // Save
   activityToSave
