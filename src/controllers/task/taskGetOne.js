@@ -26,7 +26,7 @@ module.exports = taskGetOne = (req, res, next) => {
         from: "activities",
         foreignField: "activityid",
         localField: "activityid",
-        as: "activities",
+        as: "activity",
         pipeline: [
           {
             $project: {
@@ -45,7 +45,7 @@ module.exports = taskGetOne = (req, res, next) => {
         name: 1,
         state: 1,
         description: 1,
-        activities: 1,
+        activity: 1,
       },
     },
   ]).then((task) => {

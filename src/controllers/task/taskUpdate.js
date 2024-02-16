@@ -10,6 +10,7 @@ module.exports = taskUpdate = (req, res, next) => {
   * task.update.error.taskid
   * task.update.success.modified
   * task.update.error.onmodify
+  * task.update.error.invalidstate
   
   */
 
@@ -33,6 +34,10 @@ module.exports = taskUpdate = (req, res, next) => {
     let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
     if (supportedStates.indexOf(req.body.state) > -1) {
       taskToSave.state = req.body.state
+    } else {
+      return res.status(403).json({
+        type: "task.update.error.invalidstate",
+      });
     }
   }
   console.log("taskToSave", taskToSave)
