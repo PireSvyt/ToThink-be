@@ -19,9 +19,10 @@ module.exports = activityCreate = (req, res, next) => {
   }
 
   // Save
-  let activityToSave = new Activity();
-  activityToSave.activityid = activityToSave._id
+  let activityToSave = { ...req.body }
   activityToSave.owner = req.augmented.user.userid
+  activityToSave = new Activity( activityToSave );
+  activityToSave.activityid = activityToSave._id
 
   // Save
   activityToSave
