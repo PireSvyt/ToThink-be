@@ -20,7 +20,7 @@ module.exports = activityCreate = (req, res, next) => {
 
   // Save
   let activityToSave = { ...req.body }
-  activityToSave.activityid = random_id()
+  activityToSave.activityid = random_string()
   activityToSave.owner = req.augmented.user.userid
   activityToSave = new Activity( activityToSave );
   activityToSave.activityid = activityToSave._id
