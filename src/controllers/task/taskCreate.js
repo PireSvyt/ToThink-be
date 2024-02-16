@@ -21,7 +21,9 @@ module.exports = taskCreate = (req, res, next) => {
   // Save
   let taskToSave = { ...req.body }
   taskToSave.owner = req.augmented.user.userid
-  taskToSave.activityid = req.augmented.user.userid
+  if (taskToSave.state === undefined) {
+    taskToSave.state = "tothink"
+  }
   taskToSave = new Task( taskToSave );
   taskToSave.taskid = taskToSave._id
 
