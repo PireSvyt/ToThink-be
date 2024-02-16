@@ -12,7 +12,7 @@ const activitySchema = mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String }
   },
-  { strict: true },
+  { strict: false },
 );
 
 activitySchema.plugin(uniqueValidator);
