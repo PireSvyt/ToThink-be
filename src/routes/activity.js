@@ -17,7 +17,7 @@ router.post(
   activityCreate,
 );
 router.post(
-  "/v1/save",
+  "/v1/update",
   authAuthenticate,
   authAuthenticateOwner,
   activityUpdate,
