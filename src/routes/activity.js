@@ -31,7 +31,6 @@ router.post(
 router.post(
   "/v1/getmany",
   authAuthenticate,
-  authAuthenticateOwner,
   activityGetMany,
 );
 router.post(
