@@ -1,6 +1,7 @@
 require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Activity = require("../../models/Activity.js");
+const activityContract = require("./activity.contracts.json")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -34,8 +35,17 @@ module.exports = activityUpdate = (req, res, next) => {
   }, activityToSave)
     .then(() => {
       console.log("activity.update.success.modified");
+      let filteredActivity = {}
+      Object.keys(activityToSave).forEach(key => {
+        if (activityToSave[key] !== undefined) {
+          if (activityContract.activity[key] === 1) {
+            filteredActivity[key] = activityToSave[key]
+          }
+        }
+      })
       return res.status(200).json({
         type: "activity.update.success.modified",
+        activity: filteredActivity,
       });
     })
     .catch((error) => {
@@ -44,6 +54,7 @@ module.exports = activityUpdate = (req, res, next) => {
       return res.status(400).json({
         type: "activity.update.error.onmodify",
         error: error,
+        activity: null,
       });
     });
 };

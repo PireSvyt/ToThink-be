@@ -1,0 +1,15 @@
+{
+    "activity": {
+        "_id": 0,
+        "activityid": 1,
+        "name": 1,
+        "description": 1,
+        "tasks": 1
+    },
+    "tasks": {
+        "_id": 0,
+        "taskid": 1,
+        "name": 1,
+        "state": 1
+    }
+}

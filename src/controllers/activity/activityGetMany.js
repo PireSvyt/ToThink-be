@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
+const activityContract = require("./activity.contracts.json")
 
 module.exports = activityGetMany = (req, res, next) => {
   /*
@@ -27,24 +28,13 @@ module.exports = activityGetMany = (req, res, next) => {
         as: "tasks",
         pipeline: [
           {
-            $project: {
-              _id: 0,
-              taskid: 1,
-              name: 1,
-              state: 1,
-            },
+            $project: activityContract.tasks,
           },
         ],
       },
     },
     {
-      $project: {
-        _id: 0,
-        activityid: 1,
-        name: 1,
-        description: 1,
-        tasks: 1,
-      },
+      $project: activityContract.activity,
     },
   ]).then((activities) => {
       if (activities !== undefined) {

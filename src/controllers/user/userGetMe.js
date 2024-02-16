@@ -22,29 +22,10 @@ module.exports = userGetOne = (req, res, next) => {
       $match: { userid: req.augmented.user.userid },
     },
     {
-      $lookup: {
-        from: "patients",
-        foreignField: "practicianid",
-        localField: "userid",
-        as: "patients",
-        pipeline: [
-          {
-            $project: {
-              _id: 0,
-              patientid: 1,
-              //practicianid: 1,
-              name: 1,
-            },
-          },
-        ],
-      },
-    },
-    {
       $project: {
         _id: 0,
         userid: 1,
         type: 1,
-        patients: 1,
       },
     },
   ])

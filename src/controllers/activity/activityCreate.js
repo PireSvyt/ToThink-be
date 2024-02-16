@@ -1,6 +1,7 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Activity = require("../../models/Activity.js");
+const activityContract = require("./activity.contracts.json")
 
 module.exports = activityCreate = (req, res, next) => {
   /*
@@ -30,10 +31,18 @@ module.exports = activityCreate = (req, res, next) => {
     .save()
     .then(() => {
       console.log("activity.create.success");
+      let filteredActivity = {}
+      Object.keys(activityToSave).forEach(key => {
+        if (activityToSave[key] !== undefined) {
+          if (activityContract.activity[key] === 1) {
+            filteredActivity[key] = activityToSave[key]
+          }
+        }
+      })
       return res.status(201).json({
         type: "activity.create.success",
         data: {
-          activityid: activityToSave.activityid,
+          activity: filteredActivity,
         },
       });
     })
@@ -44,7 +53,7 @@ module.exports = activityCreate = (req, res, next) => {
         type: "activity.create.error.oncreate",
         error: error,
         data: {
-          activityid: null,
+          activity: null,
         },
       });
     });

@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
+const activityContract = require("./activity.contracts.json")
 
 module.exports = activityDelete = (req, res, next) => {
   /*
