@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Task = require("../../models/Task.js");
+const taskContract = require("./task.contracts.json")
 
 module.exports = taskUpdate = (req, res, next) => {
   /*
@@ -48,8 +49,17 @@ module.exports = taskUpdate = (req, res, next) => {
   }, taskToSave)
     .then(() => {
       console.log("task.update.success.modified");
+      let filteredTask = {}
+      Object.keys(taskToSave._doc).forEach(key => {
+        if (taskContract.activity[key] === 1) {
+          filteredTask[key] = taskToSave._doc[key]
+        }
+      })
       return res.status(200).json({
         type: "task.update.success.modified",
+        data: {
+          task: filteredTask,
+        },
       });
     })
     .catch((error) => {

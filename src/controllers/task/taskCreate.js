@@ -1,6 +1,7 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Task = require("../../models/Task.js");
+const taskContract = require("./task.contracts.json")
 
 module.exports = taskCreate = (req, res, next) => {
   /*
@@ -33,10 +34,16 @@ module.exports = taskCreate = (req, res, next) => {
     .save()
     .then(() => {
       console.log("task.create.success");
+      let filteredTask = {}
+      Object.keys(taskToSave._doc).forEach(key => {
+        if (taskContract.activity[key] === 1) {
+          filteredTask[key] = taskToSave._doc[key]
+        }
+      })
       return res.status(201).json({
         type: "task.create.success",
         data: {
-          taskid: taskToSave.taskid,
+          task: filteredTask,
         },
       });
     })

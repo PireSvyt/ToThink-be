@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Task = require("../../models/Task.js");
+const taskContract = require("./task.contracts.json")
 
 module.exports = taskDelete = (req, res, next) => {
   /*

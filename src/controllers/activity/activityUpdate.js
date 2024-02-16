@@ -42,7 +42,9 @@ module.exports = activityUpdate = (req, res, next) => {
       })
       return res.status(200).json({
         type: "activity.update.success.modified",
-        activity: filteredActivity,
+        data:{
+          activity: filteredActivity,
+        }
       });
     })
     .catch((error) => {
