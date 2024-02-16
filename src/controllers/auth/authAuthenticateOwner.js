@@ -29,7 +29,7 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
     if (req.body.taskid !== undefined) {
       collection = Task;
       item = "task"
-      match['userid'] = {
+      match['owner'] = {
         $in: [ req.augmented.user.userid ],
       };
       match['taskid'] = {
@@ -39,7 +39,7 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
       if (req.body.activityid !== undefined) {
         collection = Activity;
         item = "activity"
-        match['userid'] = {
+        match['owner'] = {
           $in: [ req.augmented.user.userid ],
         };
         match['activityid'] = {
@@ -61,7 +61,7 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
             if (process.env.DEBUG === true) {
               console.log("auth.authenticateowner.success");
             }
-            req.augmented[item] = itemList[0]
+            req.augmented[item] = itemList[0]._doc
             next();
           } else {
             return res.status(404).json({

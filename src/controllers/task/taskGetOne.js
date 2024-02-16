@@ -17,8 +17,38 @@ module.exports = taskGetOne = (req, res, next) => {
     console.log("task.getone");
   }
 
-  Task.findOne({ taskid: req.body.taskid })
-    .then((task) => {
+  Task.aggregate([
+    {
+      $match: { taskid: req.body.taskid },
+    },
+    {
+      $lookup: {
+        from: "activities",
+        foreignField: "activityid",
+        localField: "activityid",
+        as: "activity",
+        pipeline: [
+          {
+            $project: {
+              _id: 0,
+              activityid: 1,
+              name: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        taskid: 1,
+        name: 1,
+        state: 1,
+        description: 1,
+        activity: 1,
+      },
+    },
+  ]).then((task) => {
       if (task !== undefined) {
         console.log("task.get.success");
         return res.status(200).json({

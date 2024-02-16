@@ -41,15 +41,16 @@ module.exports = authSignIn = (req, res, next) => {
     ).toString(CryptoJS.enc.Utf8);
   }
 
-  User.findOne({ login: attemptLogin })
-    .then((user) => {
-      if (!user) {
+  User.find({ login: attemptLogin })
+    .then((users) => {
+      if (users.length !== 1) {
         // Inexisting user
         console.log("auth.signin.error.notfound");
         return res.status(404).json({
           type: "auth.signin.error.notfound",
         });
       } else {
+        let user = users[0]
         // Chech attempts
         let attemptStatus = attemptsMeetThreshold(user.history)
         if (attemptStatus.meetsThreshold) {

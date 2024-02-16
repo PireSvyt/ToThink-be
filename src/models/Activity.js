@@ -9,6 +9,7 @@ const activitySchema = mongoose.Schema(
   {
     schema: { type: String },
     activityid: { type: String, required: true, unique: true },
+    owner: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String }
   },

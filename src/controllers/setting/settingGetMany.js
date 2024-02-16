@@ -1,18 +1,20 @@
 require("dotenv").config();
 const Setting = require("../../models/Setting.js");
 
-module.exports = settingGetAll = (req, res, next) => {
+module.exports = settingGetMany = (req, res, next) => {
   /*
   
   sends back all the settings
   
   possible response types
-  * settings.get.success
+  * setting.getmany.success
+  * setting.getmany.error.notfound
+  * setting.getmany.error.onfind
   
   */
 
   if (process.env.DEBUG) {
-    console.log("settings.get");
+    console.log("setting.getmany");
   }
 
   Setting.find({})
@@ -20,7 +22,7 @@ module.exports = settingGetAll = (req, res, next) => {
       if (settings !== undefined) {
         console.log("setting.get.success");
         return res.status(200).json({
-          type: "settings.get.success",
+          type: "setting.getmany.success",
           data: {
             settings: settings,
           },
@@ -28,7 +30,7 @@ module.exports = settingGetAll = (req, res, next) => {
       } else {
         console.log("setting.get.error.notfound");
         return res.status(101).json({
-          type: "settings.get.error.notfound",
+          type: "setting.getmany.error.notfound",
           data: {
             settings: [],
           },
@@ -36,10 +38,10 @@ module.exports = settingGetAll = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("settings.get.error.onfind");
+      console.log("setting.getmany.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "settings.get.error.onfind",
+        type: "setting.getmany.error.onfind",
         error: error,
         data: {
           settings: [],

@@ -17,7 +17,7 @@ router.post(
   activityCreate,
 );
 router.post(
-  "/v1/save",
+  "/v1/update",
   authAuthenticate,
   authAuthenticateOwner,
   activityUpdate,
@@ -31,7 +31,6 @@ router.post(
 router.post(
   "/v1/getmany",
   authAuthenticate,
-  authAuthenticateOwner,
   activityGetMany,
 );
 router.post(

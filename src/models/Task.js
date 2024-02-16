@@ -9,8 +9,10 @@ const taskSchema = mongoose.Schema(
   {
     schema: { type: String },
     taskid: { type: String, required: true, unique: true },
+    owner: { type: String, required: true },
     activityid: { type: String, required: true },
     state: { type: String, required: true, enum: [ 'tothink', 'todo', 'wip', 'block', 'done'] },
+    name: { type: String, required: true },
     description: { type: String }
   },
   { strict: true },
