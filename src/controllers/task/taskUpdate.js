@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Task = require("../../models/Task.js");
 
-module.exports = taskSave = (req, res, next) => {
+module.exports = taskUpdate = (req, res, next) => {
   /*
   
   saves a task
@@ -17,7 +17,7 @@ module.exports = taskSave = (req, res, next) => {
     console.log("task.update");
   }
 
-  let taskToSave = { ...req.body };
+  let taskToSave = { ...req.augmented.task };
 
   // Updates
   if (req.body.name !== undefined) {
@@ -31,7 +31,7 @@ module.exports = taskSave = (req, res, next) => {
   }
   if (req.body.state !== undefined) {
     let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
-    if (supportedStates.this.indexOf(req.body.state) > -1) {
+    if (supportedStates.indexOf(req.body.state) > -1) {
       taskToSave.state = req.body.state
     }
   }
