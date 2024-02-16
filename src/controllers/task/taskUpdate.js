@@ -31,7 +31,7 @@ module.exports = taskSave = (req, res, next) => {
   }
   if (req.body.state !== undefined) {
     let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
-    if (supportedStates.includes(req.body.state)) {
+    if (supportedStates.this.indexOf(req.body.state) > -1) {
       taskToSave.state = req.body.state
     }
   }
