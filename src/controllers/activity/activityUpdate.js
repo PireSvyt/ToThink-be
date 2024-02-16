@@ -34,7 +34,7 @@ module.exports = activityUpdate = (req, res, next) => {
     activityid: activityToSave.activityid
   }, activityToSave)
     .then(() => {
-      console.log("activity.update.success.modified");
+      console.log("activity.update.success.modified", activityToSave);
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
         if (activityToSave[key] !== undefined) {

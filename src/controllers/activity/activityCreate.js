@@ -30,7 +30,7 @@ module.exports = activityCreate = (req, res, next) => {
   activityToSave
     .save()
     .then(() => {
-      console.log("activity.create.success");
+      console.log("activity.create.success", activityToSave);
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
         if (activityToSave[key] !== undefined) {
