@@ -19,10 +19,24 @@ module.exports = taskSave = (req, res, next) => {
 
   let taskToSave = { ...req.body };
 
+  // Updates
+  if (req.body.name !== undefined) {
+    taskToSave.name = req.body.name
+  }
+  if (req.body.description !== undefined) {
+    taskToSave.description = req.body.description
+  }
+  if (req.body.activityid !== undefined) {
+    taskToSave.activityid = req.body.activityid
+  }
+  if (req.body.state !== undefined) {
+    taskToSave.state = req.body.state
+  }
+
   // Save
   Task.updateOne({ 
     taskid: taskToSave.taskid,
-    userid: req.augmented.user.userid
+    owner: req.augmented.user.userid
   }, taskToSave)
     .then(() => {
       console.log("task.update.success.modified");

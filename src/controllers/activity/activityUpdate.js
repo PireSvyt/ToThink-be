@@ -20,10 +20,17 @@ module.exports = activityUpdate = (req, res, next) => {
 
   let activityToSave = { ...req.augmented.activity };
 
-  // Save
+  // Updates
+  if (req.body.name !== undefined) {
+    activityToSave.name = req.body.name
+  }
+  if (req.body.description !== undefined) {
+    activityToSave.description = req.body.description
+  }
+
   Activity.updateOne({ 
     activityid: activityToSave.activityid,
-    userid: req.augmented.user.userid
+    owner: req.augmented.user.userid
   }, activityToSave)
     .then(() => {
       console.log("activity.update.success.modified");
