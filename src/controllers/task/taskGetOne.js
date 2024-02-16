@@ -23,7 +23,7 @@ module.exports = taskGetOne = (req, res, next) => {
     },
     {
       $lookup: {
-        from: "activitys",
+        from: "activities",
         foreignField: "activityid",
         localField: "activityid",
         as: "activities",

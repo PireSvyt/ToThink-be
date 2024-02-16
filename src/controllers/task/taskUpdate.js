@@ -30,7 +30,10 @@ module.exports = taskSave = (req, res, next) => {
     taskToSave.activityid = req.body.activityid
   }
   if (req.body.state !== undefined) {
-    taskToSave.state = req.body.state
+    let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
+    if (supportedStates.includes(req.body.state)) {
+      taskToSave.state = req.body.state
+    }
   }
 
   // Save
