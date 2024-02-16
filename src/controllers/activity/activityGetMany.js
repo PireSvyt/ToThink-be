@@ -15,8 +15,38 @@ module.exports = activityGetMany = (req, res, next) => {
     console.log("activities.getmany");
   }
 
-  Activity.find({ userid: req.augmented.user.userid })
-    .then((activities) => {
+  Activity.aggregate([
+    {
+      $match: { userid: req.augmented.user.userid },
+    },
+    {
+      $lookup: {
+        from: "tasks",
+        foreignField: "activityid",
+        localField: "activityid",
+        as: "tasks",
+        pipeline: [
+          {
+            $project: {
+              _id: 0,
+              taskid: 1,
+              name: 1,
+              state: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        activityid: 1,
+        name: 1,
+        description: 1,
+        tasks: 1,
+      },
+    },
+  ]).then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmany.success");
         return res.status(200).json({

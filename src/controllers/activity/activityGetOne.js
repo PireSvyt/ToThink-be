@@ -17,8 +17,38 @@ module.exports = activityGetOne = (req, res, next) => {
     console.log("activity.getone");
   }
 
-  Activity.findOne({ activityid: req.body.activityid })
-    .then((activity) => {
+  Activity.aggregate([
+    {
+      $match: { activityid: req.body.activityid },
+    },
+    {
+      $lookup: {
+        from: "tasks",
+        foreignField: "activityid",
+        localField: "activityid",
+        as: "tasks",
+        pipeline: [
+          {
+            $project: {
+              _id: 0,
+              taskid: 1,
+              name: 1,
+              state: 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        activityid: 1,
+        name: 1,
+        description: 1,
+        tasks: 1,
+      },
+    },
+  ]).then((activity) => {
       if (activity !== undefined) {
         console.log("activity.get.success");
         return res.status(200).json({
