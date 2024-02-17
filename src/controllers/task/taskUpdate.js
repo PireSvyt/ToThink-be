@@ -48,11 +48,11 @@ module.exports = taskUpdate = (req, res, next) => {
     taskid: taskToSave.taskid
   }, taskToSave)
     .then(() => {
-      console.log("task.update.success.modified", taskToSave);
+      console.log("task.update.success.modified");
       // Filter per contract
       let filteredTask = {}
       Object.keys(taskToSave).forEach(key => {
-        if (taskContract.activity[key] === 1) {
+        if (taskContract.task[key] === 1) {
           filteredTask[key] = taskToSave[key]
         }
       })
