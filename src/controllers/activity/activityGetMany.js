@@ -16,9 +16,14 @@ module.exports = activityGetMany = (req, res, next) => {
     console.log("activities.getmany");
   }
 
+  let match = { owner: req.augmented.user.userid }
+  if (req.body.activityids !== undefined) {
+    match.activityid = req.body.activityids
+  }
+
   Activity.aggregate([
     {
-      $match: { owner: req.augmented.user.userid },
+      $match: match,
     },
     {
       $lookup: {

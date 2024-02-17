@@ -18,9 +18,14 @@ module.exports = taskGetMany = (req, res, next) => {
     console.log("tasks.getmany");
   }
 
+  let match = { owner: req.augmented.user.userid }
+  if (req.body.taskids !== undefined) {
+    match.taskid = req.body.taskids
+  }
+
   Task.aggregate([
     {
-      $match: { owner: req.augmented.user.userid },
+      $match: match,
     },
     {
       $lookup: {
