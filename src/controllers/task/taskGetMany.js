@@ -20,7 +20,9 @@ module.exports = taskGetMany = (req, res, next) => {
 
   let match = { owner: req.augmented.user.userid }
   if (req.body.taskids !== undefined) {
-    match.taskid = req.body.taskids
+    match.taskid = {
+      $in: req.body.taskids
+    }
   }
 
   Task.aggregate([
