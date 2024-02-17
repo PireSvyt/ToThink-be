@@ -2,20 +2,20 @@ require("dotenv").config();
 const Task = require("../../models/Task.js");
 const taskContract = require("./task.contracts.json")
 
-module.exports = taskDelete = (req, res, next) => {
+module.exports = taskDeleteOne = (req, res, next) => {
   /*
   
   ...
   
   possible response types
-  * task.delete.success
-  * task.delete.error.outcome
-  * task.delete.error.ondelete
+  * task.deleteone.success
+  * task.deleteone.error.outcome
+  * task.deleteone.error.ondelete
   
   */
 
   if (process.env.DEBUG) {
-    console.log("task.delete");
+    console.log("task.deleteone");
   }
 
   Task.deleteOne({ taskid: req.body.taskid })
@@ -24,24 +24,29 @@ module.exports = taskDelete = (req, res, next) => {
         deleteOutcome.acknowledged === true &&
         deleteOutcome.deletedCount === 1
       ) {
-        console.log("task.delete.success");
+        console.log("task.deleteone.success");
         return res.status(200).json({
-          type: "task.delete.success",
-          data: deleteOutcome,
+          type: "task.deleteone.success",
+          data: {
+            taskid: req.augmented.task.taskid,
+            outcome: deleteOutcome,
+          }
         });
       } else {
-        console.log("task.delete.error.outcome");
+        console.log("task.deleteone.error.outcome");
         return res.status(400).json({
-          type: "task.delete.error.outcome",
-          data: deleteOutcome,
+          type: "task.deleteone.error.outcome",
+          data: {
+            outcome: deleteOutcome,
+          }
         });
       }
     })
     .catch((error) => {
-      console.log("task.delete.error.ondelete");
+      console.log("task.deleteone.error.ondelete");
       console.error(error);
       return res.status(400).json({
-        type: "task.delete.error.ondelete",
+        type: "task.deleteone.error.ondelete",
         error: error,
       });
     });

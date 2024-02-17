@@ -9,7 +9,7 @@ const activityCreate = require("../controllers/activity/activityCreate.js");
 const activityUpdate = require("../controllers/activity/activityUpdate.js");
 const activityGetOne = require("../controllers/activity/activityGetOne.js");
 const activityGetMany = require("../controllers/activity/activityGetMany.js");
-const activityDelete = require("../controllers/activity/activityDelete.js");
+const activityDeleteOne = require("../controllers/activity/activityDeleteOne.js");
 
 router.post(
   "/v1/create",
@@ -37,7 +37,7 @@ router.post(
   "/v1/delete",
   authAuthenticate,
   authAuthenticateOwner,
-  activityDelete,
+  activityDeleteOne,
 );
 
 module.exports = router;

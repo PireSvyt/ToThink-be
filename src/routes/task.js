@@ -9,7 +9,7 @@ const taskCreate = require("../controllers/task/taskCreate.js");
 const taskUpdate = require("../controllers/task/taskUpdate.js");
 const taskGetOne = require("../controllers/task/taskGetOne.js");
 const taskGetMany = require("../controllers/task/taskGetMany.js");
-const taskDelete = require("../controllers/task/taskDelete.js");
+const taskDeleteOne = require("../controllers/task/taskDeleteOne.js");
 
 router.post(
   "/v1/create",
@@ -37,7 +37,7 @@ router.post(
   "/v1/delete",
   authAuthenticate,
   authAuthenticateOwner,
-  taskDelete,
+  taskDeleteOne,
 );
 
 module.exports = router;
