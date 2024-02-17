@@ -61,6 +61,7 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
             if (process.env.DEBUG === true) {
               console.log("auth.authenticateowner.success");
             }
+            console.log("AUGMENTING", itemList[0]._doc)
             req.augmented[item] = itemList[0]._doc
             next();
           } else {

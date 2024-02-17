@@ -34,6 +34,7 @@ module.exports = activityUpdate = (req, res, next) => {
   }, activityToSave)
     .then(() => {
       console.log("activity.update.success.modified", activityToSave);
+      // Filter per contract
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
         if (activityContract.activity[key] === 1) {
