@@ -51,9 +51,9 @@ module.exports = taskUpdate = (req, res, next) => {
       console.log("task.update.success.modified", taskToSave);
       // Filter per contract
       let filteredTask = {}
-      Object.keys(taskToSave._doc).forEach(key => {
+      Object.keys(taskToSave).forEach(key => {
         if (taskContract.activity[key] === 1) {
-          filteredTask[key] = taskToSave._doc[key]
+          filteredTask[key] = taskToSave[key]
         }
       })
       // Impacted activities
