@@ -9,6 +9,7 @@ const activityCreate = require("../controllers/activity/activityCreate.js");
 const activityUpdate = require("../controllers/activity/activityUpdate.js");
 const activityGetOne = require("../controllers/activity/activityGetOne.js");
 const activityGetMany = require("../controllers/activity/activityGetMany.js");
+const activityGetMine = require("../controllers/activity/activityGetMine.js");
 const activityDeleteOne = require("../controllers/activity/activityDeleteOne.js");
 
 router.post(
@@ -32,6 +33,11 @@ router.post(
   "/v1/getmany",
   authAuthenticate,
   activityGetMany,
+);
+router.post(
+  "/v1/getmine",
+  authAuthenticate,
+  activityGetMine,
 );
 router.post(
   "/v1/delete",

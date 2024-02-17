@@ -1,4 +1,9 @@
 {
+    "mine": {
+        "_id": 0,
+        "activityid": 1,
+        "name": 1
+    },
     "activity": {
         "_id": 0,
         "activityid": 1,
