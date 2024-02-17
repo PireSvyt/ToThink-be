@@ -55,10 +55,22 @@ module.exports = taskUpdate = (req, res, next) => {
           filteredTask[key] = taskToSave._doc[key]
         }
       })
+      let activityids = []
+      if (req.augmented.task.activityid !== filteredTask.activityid) {
+        if (filteredTask.activityid !== undefined && filteredTask.activityid !== "") {
+          activityids.push(filteredTask.activityid)
+        }
+        if (req.augmented.task.activityid !== undefined && req.augmented.task.activityid !== "") {
+          activityids.push(req.augmented.task.activityid)
+        }
+      }
       return res.status(200).json({
         type: "task.update.success.modified",
         data: {
           task: filteredTask,
+          dependencies: {
+            activityids: activityids
+          }
         },
       });
     })

@@ -30,6 +30,9 @@ module.exports = taskDeleteOne = (req, res, next) => {
           data: {
             taskid: req.augmented.task.taskid,
             outcome: deleteOutcome,
+            dependencies: {
+              activityids: [req.augmented.task.activityid]
+            }
           }
         });
       } else {

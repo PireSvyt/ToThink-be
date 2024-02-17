@@ -40,10 +40,14 @@ module.exports = taskCreate = (req, res, next) => {
           filteredTask[key] = taskToSave._doc[key]
         }
       })
+      // impacted activities
       return res.status(201).json({
         type: "task.create.success",
         data: {
           task: filteredTask,
+          dependencies: {
+            activityids: [filteredTask.activityid]
+          }
         },
       });
     })
