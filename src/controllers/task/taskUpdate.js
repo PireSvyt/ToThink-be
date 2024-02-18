@@ -31,6 +31,9 @@ module.exports = taskUpdate = (req, res, next) => {
   if (req.body.activityid !== undefined) {
     taskToSave.activityid = req.body.activityid
   }
+  if (req.body.order !== undefined) {
+    taskToSave.order = req.body.order
+  }
   if (req.body.state !== undefined) {
     let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
     if (supportedStates.indexOf(req.body.state) > -1) {
