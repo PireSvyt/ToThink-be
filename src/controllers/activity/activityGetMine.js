@@ -43,10 +43,26 @@ module.exports = activityGetMine = (req, res, next) => {
     .then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmine.success");
+        // Reset order
+        let orders = activities.map(a => {return a.order})
+        let min = Math.min(orders)
+        let max = Math.max(orders)
+        let c = 1
+        let K = 100
+        let activitiesReordered = activities.map(a => {
+          let act = {...a}
+          if (max !== min) {
+            act.order = (a.order - min) / (max - min) * K + 1
+          } else {
+            act.order = (c / orders.length) * K + 1
+            c += 1
+          }
+          return act
+        })
         return res.status(200).json({
           type: "activities.getmine.success",
           data: {
-            activities: activities,
+            activities: activitiesReordered,
           },
         });
       } else {
