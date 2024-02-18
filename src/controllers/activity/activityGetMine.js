@@ -38,7 +38,9 @@ module.exports = activityGetMine = (req, res, next) => {
     {
       $project: activityContract.mine,
     },
-  ]).then((activities) => {
+  ])
+    .sort({order: -1})
+    .then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmine.success");
         return res.status(200).json({

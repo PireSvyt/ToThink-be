@@ -32,6 +32,9 @@ module.exports = activityGetOne = (req, res, next) => {
           {
             $project: activityContract.tasks,
           },
+          {
+            $sort: { order: -1 }
+          }
         ],
       },
     },

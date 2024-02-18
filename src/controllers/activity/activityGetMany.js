@@ -43,7 +43,9 @@ module.exports = activityGetMany = (req, res, next) => {
     {
       $project: activityContract.activity,
     },
-  ]).then((activities) => {
+  ])
+    .sort({order: -1})
+    .then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmany.success");
         return res.status(200).json({
