@@ -11,7 +11,8 @@ const activitySchema = mongoose.Schema(
     activityid: { type: String, required: true, unique: true },
     owner: { type: String, required: true },
     name: { type: String, required: true },
-    description: { type: String }
+    description: { type: String },
+    order: { type: Number }
   },
   { strict: true },
 );

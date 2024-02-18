@@ -13,7 +13,8 @@ const taskSchema = mongoose.Schema(
     activityid: { type: String, required: true },
     state: { type: String, required: true, enum: [ 'tothink', 'todo', 'wip', 'block', 'done'] },
     name: { type: String, required: true },
-    description: { type: String }
+    description: { type: String },
+    order: { type: Number }
   },
   { strict: true },
 );
