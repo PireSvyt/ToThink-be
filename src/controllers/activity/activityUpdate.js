@@ -28,6 +28,9 @@ module.exports = activityUpdate = (req, res, next) => {
   if (req.body.description !== undefined) {
     activityToSave.description = req.body.description
   }
+  if (req.body.order !== undefined) {
+    activityToSave.order = req.body.order
+  }
 
   Activity.updateOne({ 
     activityid: activityToSave.activityid
