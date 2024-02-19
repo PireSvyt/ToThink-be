@@ -47,7 +47,7 @@ module.exports = activityGetOne = (req, res, next) => {
         return res.status(200).json({
           type: "activity.getone.success",
           data: {
-            activity: activity,
+            activity: activity[0],
           },
         });
       } else {
