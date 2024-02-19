@@ -21,7 +21,7 @@ module.exports = activityUpdate = (req, res, next) => {
   }
 
   activityGetOne({ 
-    activityid: activityToSave.activityid
+    activityid: req.body.activityid
   }).then(getResponse => {
     console.log("getResponse",getResponse)
     
