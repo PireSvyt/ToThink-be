@@ -2,6 +2,7 @@ require("dotenv").config();
 const jwt_decode = require("jwt-decode");
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
+const activityGetOne = require("./activityGetOne.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -19,18 +20,37 @@ module.exports = activityUpdate = (req, res, next) => {
     console.log("activity.update");
   }
 
-  let activityToSave = { ...req.augmented.activity };
+  activityGetOne({ 
+    activityid: activityToSave.activityid
+  }).then(getResponse => {
+    console.log("getResponse",getResponse)
+    
+    if (getResponse.type !== "activity.getone.success") {
+      return res.status(400).json({
+        type: "activity.update.error.onfind",
+        activity: null,
+      });
+    } else {
 
-  // Updates
-  if (req.body.name !== undefined) {
-    activityToSave.name = req.body.name
-  }
-  if (req.body.description !== undefined) {
-    activityToSave.description = req.body.description
-  }
-  if (req.body.order !== undefined) {
-    activityToSave.order = req.body.order
-  }
+      let activityToSave = { ...getResponse.data.activity };
+      let updatedFields = []
+    
+      // Updates
+      if (req.body.name !== undefined) {
+        activityToSave.name = req.body.name
+        updatedFields.push('name')
+      }
+      if (req.body.description !== undefined) {
+        activityToSave.description = req.body.description
+        updatedFields.push('description')
+      }
+      if (req.body.order !== undefined) {
+        activityToSave.order = req.body.order
+        updatedFields.push('order')
+      }
+
+    }
+  })
 
   Activity.updateOne({ 
     activityid: activityToSave.activityid
@@ -40,7 +60,8 @@ module.exports = activityUpdate = (req, res, next) => {
       // Filter per contract
       let filteredActivity = {}
       Object.keys(activityToSave).forEach(key => {
-        if (activityContract.activity[key] === 1) {
+        if (activityContract.activity[key] === 1 
+          && updatedFields.includes(key)) {
           filteredActivity[key] = activityToSave[key]
         }
       })
