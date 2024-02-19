@@ -8,9 +8,9 @@ module.exports = activityGetOne = (req, res, next) => {
   sends back the activity value
   
   possible response types
-  * activity.get.success
-  * activity.get.error.notfound
-  * activity.get.error.undefined
+  * activity.getone.success
+  * activity.getone.error.notfound
+  * activity.getone.error.undefined
   
   */
 
@@ -43,17 +43,17 @@ module.exports = activityGetOne = (req, res, next) => {
     },
   ]).then((activity) => {
       if (activity !== undefined) {
-        console.log("activity.get.success");
+        console.log("activity.getone.success");
         return res.status(200).json({
-          type: "activity.get.success",
+          type: "activity.getone.success",
           data: {
             activity: activity,
           },
         });
       } else {
-        console.log("activity.get.error.undefined");
+        console.log("activity.getone.error.undefined");
         return res.status(101).json({
-          type: "activity.get.error.undefined",
+          type: "activity.getone.error.undefined",
           data: {
             activity: undefined,
           },
@@ -61,10 +61,10 @@ module.exports = activityGetOne = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("activity.get.error.onfind");
+      console.log("activity.getone.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "activity.get.error.onfind",
+        type: "activity.getone.error.onfind",
         error: error,
         data: {
           activity: undefined,
