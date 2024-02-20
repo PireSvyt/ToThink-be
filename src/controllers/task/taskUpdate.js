@@ -29,7 +29,7 @@ module.exports = taskUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     taskUpdate[key] = req.body[key];
   }
-  Activity.findOneAndUpdate(
+  Task.findOneAndUpdate(
     { taskid: req.body.taskid }, 
     { $set: taskUpdate }, 
     { new: true })
