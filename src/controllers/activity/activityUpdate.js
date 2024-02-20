@@ -31,16 +31,15 @@ module.exports = activityUpdate = (req, res, next) => {
     activityUpdate[key] = req.body[key];
   }
   Activity.findOneAndUpdate(
-    { activityid: activityToSave.activityid }, 
+    { activityid: req.body.activityid }, 
     { $set: activityUpdate }, 
     { new: true })
-    .then(outcome => {
+    .then(newState => {
       console.log("activity.update.success.modified", activityUpdate);
       return res.status(200).json({
         type: "activity.update.success.modified",
         data:{
           update: activityUpdate,
-          outcome: outcome,
         }
       });
     })

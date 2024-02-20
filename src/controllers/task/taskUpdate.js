@@ -21,37 +21,20 @@ module.exports = taskUpdate = (req, res, next) => {
 
   let taskToSave = { ...req.augmented.task };
 
-  // Updates
-  if (req.body.name !== undefined) {
-    taskToSave.name = req.body.name
-  }
-  if (req.body.description !== undefined) {
-    taskToSave.description = req.body.description
-  }
-  if (req.body.activityid !== undefined) {
-    taskToSave.activityid = req.body.activityid
-  }
-  if (req.body.order !== undefined) {
-    taskToSave.order = req.body.order
-  }
-  if (req.body.state !== undefined) {
-    let supportedStates = [ 'tothink', 'todo', 'wip', 'block', 'done']
-    if (supportedStates.indexOf(req.body.state) > -1) {
-      taskToSave.state = req.body.state
-    } else {
-      return res.status(403).json({
-        type: "task.update.error.invalidstate",
-      });
-    }
-  }
-  console.log("taskToSave", taskToSave)
+  // Checks
+  
 
-  // Save
-  Task.updateOne({ 
-    taskid: taskToSave.taskid
-  }, taskToSave)
-    .then(() => {
-      console.log("task.update.success.modified");
+  // Update
+  const taskUpdate = {};
+  for (const key of Object.keys(req.body)){
+    taskUpdate[key] = req.body[key];
+  }
+  Activity.findOneAndUpdate(
+    { taskid: req.body.taskid }, 
+    { $set: taskUpdate }, 
+    { new: true })
+    .then(newState => {
+      console.log("task.update.success.modified", taskUpdate);
       // Filter per contract
       let filteredTask = {}
       Object.keys(taskToSave).forEach(key => {
@@ -68,15 +51,15 @@ module.exports = taskUpdate = (req, res, next) => {
         if (req.augmented.task.activityid !== undefined && req.augmented.task.activityid !== "") {
           activityids.push(req.augmented.task.activityid)
         }
-      }
+      }      
       return res.status(200).json({
         type: "task.update.success.modified",
-        data: {
-          task: filteredTask,
+        data:{
+          update: taskUpdate,
           dependencies: {
             activityids: activityids
           }
-        },
+        }
       });
     })
     .catch((error) => {
