@@ -50,7 +50,10 @@ module.exports = activityGetMany = (req, res, next) => {
     .then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmany.success");
-        let requiredActivities = {...activities}
+        let requiredActivities = {}
+        activities.forEach(activity => {
+          requiredActivities[activity.activityid] = {...activity}
+        })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredActivities).forEach(activitid => {
             req.body.requirements.forEach(requirement => {

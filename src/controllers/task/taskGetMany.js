@@ -48,7 +48,10 @@ module.exports = taskGetMany = (req, res, next) => {
   ]).then((tasks) => {
       if (tasks !== undefined) {
         console.log("task.get.success");
-        let requiredTasks = {...tasks}
+        let requiredTasks = {}
+        tasks.forEach(task => {
+          requiredTasks[task.taskid] = {...task}
+        })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredTasks).forEach(taskid => {
             req.body.requirements.forEach(requirement => {
