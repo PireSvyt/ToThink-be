@@ -33,15 +33,12 @@ module.exports = taskUpdate = (req, res, next) => {
     { taskid: req.body.taskid }, 
     { $set: taskUpdate }, 
     { new: true })
-    .then(newState => {
+    .then(newTaskState => {
       console.log("task.update.success.modified", taskUpdate);
-      // Filter per contract
-      let filteredTask = {}
-      Object.keys(taskToSave).forEach(key => {
-        if (taskContract.task[key] === 1) {
-          filteredTask[key] = taskToSave[key]
-        }
-      })
+      let updatedTask = {}
+      for (const key of Object.keys(req.body)){
+        updatedTask[key] = newTaskState[key];
+      }
       // Impacted activities
       let activityids = []
       if (req.augmented.task.activityid !== filteredTask.activityid) {
@@ -55,7 +52,7 @@ module.exports = taskUpdate = (req, res, next) => {
       return res.status(200).json({
         type: "task.update.success.modified",
         data:{
-          update: taskUpdate,
+          update: updatedTask,
           dependencies: {
             activityids: activityids
           }

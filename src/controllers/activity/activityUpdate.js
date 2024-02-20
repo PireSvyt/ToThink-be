@@ -34,12 +34,16 @@ module.exports = activityUpdate = (req, res, next) => {
     { activityid: req.body.activityid }, 
     { $set: activityUpdate }, 
     { new: true })
-    .then(newState => {
+    .then(newActivityState => {
       console.log("activity.update.success.modified", activityUpdate);
+      let updatedActivity = {}
+      for (const key of Object.keys(req.body)){
+        updatedActivity[key] = newActivityState[key];
+      }
       return res.status(200).json({
         type: "activity.update.success.modified",
         data:{
-          update: activityUpdate,
+          update: updatedActivity,
         }
       });
     })
