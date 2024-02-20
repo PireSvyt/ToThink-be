@@ -41,9 +41,9 @@ module.exports = taskUpdate = (req, res, next) => {
       }
       // Impacted activities
       let activityids = []
-      if (req.augmented.task.activityid !== filteredTask.activityid) {
-        if (filteredTask.activityid !== undefined && filteredTask.activityid !== "") {
-          activityids.push(filteredTask.activityid)
+      if (req.augmented.task.activityid !== updatedTask.activityid) {
+        if (updatedTask.activityid !== undefined && updatedTask.activityid !== "") {
+          activityids.push(updatedTask.activityid)
         }
         if (req.augmented.task.activityid !== undefined && req.augmented.task.activityid !== "") {
           activityids.push(req.augmented.task.activityid)
