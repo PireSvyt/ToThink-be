@@ -9,6 +9,8 @@ module.exports = activityGetMany = (req, res, next) => {
   
   possible response types
   * activities.getmany.success
+  * activities.getmany.error.notfound
+  * activities.getmany.error.onfind
   
   */
 
@@ -48,10 +50,28 @@ module.exports = activityGetMany = (req, res, next) => {
     .then((activities) => {
       if (activities !== undefined) {
         console.log("activities.getmany.success");
+        let requiredActivities = {...activities}
+        if (req.body.requirements !== undefined) {
+          Object.keys(requiredActivities).forEach(activitid => {
+            req.body.requirements.forEach(requirement => {
+              if (requiredActivities[activitid][requirement] === undefined) {
+                switch (requirement) {
+                  case 'name': 
+                  case 'description': 
+                    requiredActivities[activitid][requirement] = ''
+                    break
+                  case 'tasks': 
+                    requiredActivities[activitid][requirement] = []
+                    break
+                }
+              }
+            })
+          })
+        }
         return res.status(200).json({
           type: "activities.getmany.success",
           data: {
-            activities: activities,
+            activities: requiredActivities,
           },
         });
       } else {
@@ -59,7 +79,7 @@ module.exports = activityGetMany = (req, res, next) => {
         return res.status(101).json({
           type: "activities.getmany.error.notfound",
           data: {
-            activities: [],
+            activities: {},
           },
         });
       }
@@ -71,7 +91,7 @@ module.exports = activityGetMany = (req, res, next) => {
         type: "activities.getmany.error.onfind",
         error: error,
         data: {
-          activities: [],
+          activities: {},
         },
       });
     });

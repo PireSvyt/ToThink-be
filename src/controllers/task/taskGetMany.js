@@ -48,10 +48,28 @@ module.exports = taskGetMany = (req, res, next) => {
   ]).then((tasks) => {
       if (tasks !== undefined) {
         console.log("task.get.success");
+        let requiredTasks = {...tasks}
+        if (req.body.requirements !== undefined) {
+          Object.keys(requiredTasks).forEach(taskid => {
+            req.body.requirements.forEach(requirement => {
+              if (requiredTasks[taskid][requirement] === undefined) {
+                switch (requirement) {
+                  case 'name': 
+                  case 'description': 
+                  requiredTasks[taskid][requirement] = ''
+                    break
+                  case 'state': 
+                  requiredTasks[taskid][requirement] = 'tothink'
+                    break
+                }
+              }
+            })
+          })
+        }
         return res.status(200).json({
           type: "tasks.getmany.success",
           data: {
-            tasks: tasks,
+            tasks: requiredTasks,
           },
         });
       } else {
