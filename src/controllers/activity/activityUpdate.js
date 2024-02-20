@@ -20,55 +20,27 @@ module.exports = activityUpdate = (req, res, next) => {
     console.log("activity.update");
   }
 
-  activityGetOne({ 
-    activityid: req.body.activityid
-  }).then(getResponse => {
-    console.log("getResponse",getResponse)
-    
-    if (getResponse.type !== "activity.getone.success") {
-      return res.status(400).json({
-        type: "activity.update.error.onfind",
-        activity: null,
-      });
-    } else {
+  let activityToSave = { ...req.augmented.activity };
 
-      let activityToSave = { ...getResponse.data.activity };
-      let updatedFields = []
-    
-      // Updates
-      if (req.body.name !== undefined) {
-        activityToSave.name = req.body.name
-        updatedFields.push('name')
-      }
-      if (req.body.description !== undefined) {
-        activityToSave.description = req.body.description
-        updatedFields.push('description')
-      }
-      if (req.body.order !== undefined) {
-        activityToSave.order = req.body.order
-        updatedFields.push('order')
-      }
+  // Checks
+  
 
-    }
-  })
-
-  Activity.updateOne({ 
-    activityid: activityToSave.activityid
-  }, activityToSave)
-    .then(() => {
-      console.log("activity.update.success.modified", activityToSave);
-      // Filter per contract
-      let filteredActivity = {}
-      Object.keys(activityToSave).forEach(key => {
-        if (activityContract.activity[key] === 1 
-          && updatedFields.includes(key)) {
-          filteredActivity[key] = activityToSave[key]
-        }
-      })
+  // Update
+  const activityUpdate = {};
+  for (const key of Object.keys(req.body)){
+    activityUpdate[key] = req.body[key];
+  }
+  Activity.findOneAndUpdate(
+    { activityid: activityToSave.activityid }, 
+    { $set: activityUpdate }, 
+    { new: true })
+    .then(outcome => {
+      console.log("activity.update.success.modified", activityUpdate);
       return res.status(200).json({
         type: "activity.update.success.modified",
         data:{
-          activity: filteredActivity,
+          update: activityUpdate,
+          outcome: outcome,
         }
       });
     })
@@ -78,7 +50,7 @@ module.exports = activityUpdate = (req, res, next) => {
       return res.status(400).json({
         type: "activity.update.error.onmodify",
         error: error,
-        activity: null,
+          update: null,
       });
     });
 };

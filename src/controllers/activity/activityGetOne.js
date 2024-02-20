@@ -17,7 +17,7 @@ module.exports = activityGetOne = (req, res, next) => {
   if (process.env.DEBUG) {
     console.log("activity.getone");
   }
-
+  
   Activity.aggregate([
     {
       $match: { activityid: req.body.activityid },
