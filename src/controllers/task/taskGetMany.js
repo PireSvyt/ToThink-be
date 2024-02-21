@@ -23,11 +23,6 @@ module.exports = taskGetMany = (req, res, next) => {
     if (req.body.taskids.length !== 0) {
       match.taskid = {
         $in: req.body.taskids,
-        owner: req.augmented.user.userid
-      }
-    } else {
-      match.taskid = {
-        owner: req.augmented.user.userid
       }
     }
   }

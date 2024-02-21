@@ -22,12 +22,7 @@ module.exports = activityGetMany = (req, res, next) => {
   if (req.body.activityids !== undefined) {
     if (req.body.activityids.length !== 0) {
       match.activityid = {
-        $in: req.body.activityids,
-        owner: req.augmented.user.userid
-      }
-    } else {
-      match.taskid = {
-        owner: req.augmented.user.userid
+        $in: req.body.activityids
       }
     }
   }
