@@ -20,8 +20,15 @@ module.exports = activityGetMany = (req, res, next) => {
 
   let match = { owner: req.augmented.user.userid }
   if (req.body.activityids !== undefined) {
-    match.activityid = {
-      $in: req.body.activityids
+    if (req.body.taskids.length !== 0) {
+      match.activityid = {
+        $in: req.body.activityids,
+        owner: req.augmented.user.userid
+      }
+    } else {
+      match.taskid = {
+        owner: req.augmented.user.userid
+      }
     }
   }
 
