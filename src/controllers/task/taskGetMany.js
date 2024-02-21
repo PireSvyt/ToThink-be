@@ -8,14 +8,14 @@ module.exports = taskGetMany = (req, res, next) => {
   sends back all the tasks
   
   possible response types
-  * tasks.getmany.success
-  * tasks.getmany.error.notfound
-  * tasks.getmany.error.onfind
+  * task.getmany.success
+  * task.getmany.error.notfound
+  * task.getmany.error.onfind
   
   */
 
   if (process.env.DEBUG) {
-    console.log("tasks.getmany");
+    console.log("task.getmany");
   }
 
   let match = { owner: req.augmented.user.userid }
@@ -47,7 +47,7 @@ module.exports = taskGetMany = (req, res, next) => {
     },
   ]).then((tasks) => {
       if (tasks !== undefined) {
-        console.log("task.get.success");
+        console.log("task.getmany.success");
         let requiredTasks = {}
         tasks.forEach(task => {
           requiredTasks[task.taskid] = {...task}
@@ -70,15 +70,15 @@ module.exports = taskGetMany = (req, res, next) => {
           })
         }
         return res.status(200).json({
-          type: "tasks.getmany.success",
+          type: "task.getmany.success",
           data: {
             tasks: requiredTasks,
           },
         });
       } else {
-        console.log("task.get.error.notfound");
+        console.log("task.getmany.error.notfound");
         return res.status(101).json({
-          type: "tasks.getmany.error.notfound",
+          type: "task.getmany.error.notfound",
           data: {
             tasks: [],
           },
@@ -86,10 +86,10 @@ module.exports = taskGetMany = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("tasks.getmany.error.onfind");
+      console.log("task.getmany.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "tasks.getmany.error.onfind",
+        type: "task.getmany.error.onfind",
         error: error,
         data: {
           tasks: [],

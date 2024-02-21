@@ -8,12 +8,12 @@ module.exports = activityGetMine = (req, res, next) => {
   sends back all the activities
   
   possible response types
-  * activities.getmine.success
+  * activity.getmine.success
   
   */
 
   if (process.env.DEBUG) {
-    console.log("activities.getmine");
+    console.log("activity.getmine");
   }
 
   let match = { owner: req.augmented.user.userid }
@@ -42,7 +42,7 @@ module.exports = activityGetMine = (req, res, next) => {
     .sort({order: -1})
     .then((activities) => {
       if (activities !== undefined) {
-        console.log("activities.getmine.success");
+        console.log("activity.getmine.success");
         /*// Reset order
         let orders = activities.map(a => {return a.order})
         let min = Math.min(orders)
@@ -60,15 +60,15 @@ module.exports = activityGetMine = (req, res, next) => {
           return act
         })*/
         return res.status(200).json({
-          type: "activities.getmine.success",
+          type: "activity.getmine.success",
           data: {
             activities: activities,
           },
         });
       } else {
-        console.log("activities.getmine.error.notfound");
+        console.log("activity.getmine.error.notfound");
         return res.status(101).json({
-          type: "activities.getmine.error.notfound",
+          type: "activity.getmine.error.notfound",
           data: {
             activities: [],
           },
@@ -76,10 +76,10 @@ module.exports = activityGetMine = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("activities.getmine.error.onfind");
+      console.log("activity.getmine.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "activities.getmine.error.onfind",
+        type: "activity.getmine.error.onfind",
         error: error,
         data: {
           activities: [],

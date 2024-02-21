@@ -8,14 +8,14 @@ module.exports = activityGetMany = (req, res, next) => {
   sends back all the activities
   
   possible response types
-  * activities.getmany.success
-  * activities.getmany.error.notfound
-  * activities.getmany.error.onfind
+  * activity.getmany.success
+  * activity.getmany.error.notfound
+  * activity.getmany.error.onfind
   
   */
 
   if (process.env.DEBUG) {
-    console.log("activities.getmany");
+    console.log("activity.getmany");
   }
 
   let match = { owner: req.augmented.user.userid }
@@ -49,7 +49,7 @@ module.exports = activityGetMany = (req, res, next) => {
     .sort({order: -1})
     .then((activities) => {
       if (activities !== undefined) {
-        console.log("activities.getmany.success");
+        console.log("activity.getmany.success");
         let requiredActivities = {}
         activities.forEach(activity => {
           requiredActivities[activity.activityid] = {...activity}
@@ -72,15 +72,15 @@ module.exports = activityGetMany = (req, res, next) => {
           })
         }
         return res.status(200).json({
-          type: "activities.getmany.success",
+          type: "activity.getmany.success",
           data: {
             activities: requiredActivities,
           },
         });
       } else {
-        console.log("activities.getmany.error.notfound");
+        console.log("activity.getmany.error.notfound");
         return res.status(101).json({
-          type: "activities.getmany.error.notfound",
+          type: "activity.getmany.error.notfound",
           data: {
             activities: {},
           },
@@ -88,10 +88,10 @@ module.exports = activityGetMany = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("activities.getmany.error.onfind");
+      console.log("activity.getmany.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "activities.getmany.error.onfind",
+        type: "activity.getmany.error.onfind",
         error: error,
         data: {
           activities: {},
