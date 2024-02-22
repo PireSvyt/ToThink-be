@@ -39,7 +39,9 @@ module.exports = activityUpdate = (req, res, next) => {
     { $set: activityUpdate }, 
     { new: true })
     .then(newActivityState => {
-      console.log("activity.update.success.modified", activityUpdate);
+      console.log("activity.update.success.modified");
+      console.log("from:", activityUpdate);
+      console.log("to  :", newActivityState);
       let updatedActivity = {}
       for (const key of Object.keys(req.body)){
         updatedActivity[key] = newActivityState[key];

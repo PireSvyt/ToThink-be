@@ -41,7 +41,9 @@ module.exports = tothinkUpdate = (req, res, next) => {
     { $set: tothinkUpdate }, 
     { new: true })
     .then(newToThinkState => {
-      console.log("tothink.update.success.modified", tothinkUpdate);
+      console.log("tothink.update.success.modified");
+      console.log("from:", tothinkUpdate);
+      console.log("to  :", newToThinkState);
       let updatedToThink = {}
       for (const key of Object.keys(req.body)){
         updatedToThink[key] = newToThinkState[key];
