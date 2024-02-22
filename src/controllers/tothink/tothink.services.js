@@ -7,15 +7,15 @@ module.exports = function complementRequirments (requirements, item) {
                 case 'name': 
                 case 'description': 
                 case 'activityid': 
-                    requiredToThinks[requirement] = ''
+                    complementedItem[requirement] = ''
                     break
                 case 'state': 
-                    requiredToThinks[requirement] = 'tothink'
+                    complementedItem[requirement] = 'tothink'
                     break
                 case 'dueDate': 
                 case 'recurring': 
                 case 'recurrence': 
-                    requiredToThinks[requirement] = null
+                    complementedItem[requirement] = null
                     break
             }
         }

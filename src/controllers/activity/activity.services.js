@@ -6,10 +6,10 @@ module.exports = function complementRequirments (requirements, item) {
             switch (requirement) {
                 case 'name': 
                 case 'description': 
-                    requiredToThinks[requirement] = ''
+                    complementedItem[requirement] = ''
                     break
                 case 'tothinks':
-                    requiredToThinks[requirement] = []
+                    complementedItem[requirement] = []
                     break
             }
         }
