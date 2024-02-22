@@ -1,6 +1,6 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const tothinkContract = require("./tothink.contracts.json")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = tothinkDeleteOne = (req, res, next) => {
   /*
@@ -25,6 +25,10 @@ module.exports = tothinkDeleteOne = (req, res, next) => {
         deleteOutcome.deletedCount === 1
       ) {
         console.log("tothink.deleteone.success");
+        changeCreate(req, {
+          itemid: req.body.tothinkid, 
+          command: 'delete',
+        })
         return res.status(200).json({
           type: "tothink.deleteone.success",
           data: {

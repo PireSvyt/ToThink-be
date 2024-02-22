@@ -21,6 +21,7 @@ module.exports = changeCreate = async (req, change) => {
   changeToSave.author = req.augmented.user.userid
   changeToSave.date = new Date()
   changeToSave = new Change( changeToSave );
+  changeToSave.changeid = changeToSave._id
 
   // Save
   try {
@@ -30,7 +31,7 @@ module.exports = changeCreate = async (req, change) => {
         console.log("change.create.success");
         })
   } catch (error) {
-    console.log("change.create.error.oncreate");
+    console.log("change.create.error");
     console.log(error);
   }
 };

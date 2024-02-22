@@ -1,6 +1,7 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
+const complementRequirments = required("./activity.services.js")
 
 module.exports = activityGetMany = (req, res, next) => {
   /*
@@ -58,19 +59,10 @@ module.exports = activityGetMany = (req, res, next) => {
         })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredActivities).forEach(activitid => {
-            req.body.requirements.forEach(requirement => {
-              if (requiredActivities[activitid][requirement] === undefined) {
-                switch (requirement) {
-                  case 'name': 
-                  case 'description': 
-                    requiredActivities[activitid][requirement] = ''
-                    break
-                  case 'tothinks': 
-                    requiredActivities[activitid][requirement] = []
-                    break
-                }
-              }
-            })
+            requiredActivities[activitid] = complementRequirments(
+              [...req.body.requirements], 
+              requiredActivities[activitid]
+            )
           })
         }
         return res.status(200).json({

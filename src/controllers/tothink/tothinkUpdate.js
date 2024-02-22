@@ -1,6 +1,6 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const random_id = require("../../resources/random_id.js")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = tothinkUpdate = (req, res, next) => {
   /*
@@ -62,6 +62,11 @@ module.exports = tothinkUpdate = (req, res, next) => {
           activityids.push(req.augmented.tothink.activityid)
         }
       }      
+      changeCreate(req, {
+        itemid: tothinkUpdate.tothinkid, 
+        command: 'update',
+        changes: {...tothinkUpdate}
+      })
       return res.status(200).json({
         type: "tothink.update.success.modified",
         data:{

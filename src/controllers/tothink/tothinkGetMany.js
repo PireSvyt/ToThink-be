@@ -1,6 +1,7 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
 const tothinkContract = require("./tothink.contracts.json")
+const complementRequirments = require("./tothink.services.js")
 
 module.exports = tothinkGetMany = (req, res, next) => {
   /*
@@ -56,19 +57,10 @@ module.exports = tothinkGetMany = (req, res, next) => {
         })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredToThinks).forEach(tothinkid => {
-            req.body.requirements.forEach(requirement => {
-              if (requiredToThinks[tothinkid][requirement] === undefined) {
-                switch (requirement) {
-                  case 'name': 
-                  case 'description': 
-                  requiredToThinks[tothinkid][requirement] = ''
-                    break
-                  case 'state': 
-                  requiredToThinks[tothinkid][requirement] = 'tothink'
-                    break
-                }
-              }
-            })
+            requiredToThinks[tothinkid] = complementRequirments(
+              [...req.body.requirements], 
+              requiredToThinks[tothinkid]
+            )
           })
         }
         return res.status(200).json({

@@ -1,6 +1,6 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const tothinkContract = require("./tothink.contracts.json")
+const changeGetByItemid = require("../change/changeGetByItemid.js")
 
 module.exports = tothinkGetHistory = (req, res, next) => {
   /*
@@ -18,45 +18,35 @@ module.exports = tothinkGetHistory = (req, res, next) => {
     console.log("tothink.gethistory");
   }
 
-  ToThink.findOne([
-    {
-      $match: { tothinkid: req.body.tothinkid },
-    },
-    {
-      $project: { 
-        _id: 0,
-        tothinkid: 1,
-        history: 1
-      },
-    },
-  ]).then((tothinkHistory) => {
-      if (tothinkHistory !== undefined) {
-        console.log("tothink.gethistory.success");
-        return res.status(200).json({
-          type: "tothink.gethistory.success",
-          data: {
-            history: tothinkHistory,
-          },
-        });
-      } else {
-        console.log("tothink.gethistory.error.notfound");
-        return res.status(101).json({
-          type: "tothink.gethistory.error.notfound",
-          data: {
-            history: undefined,
-          },
-        });
-      }
-    })
-    .catch((error) => {
-      console.log("tothink.gethistory.error.onfind");
-      console.error(error);
-      return res.status(400).json({
-        type: "tothink.gethistory.error.onfind",
-        error: error,
+  changeGetByItemid(req.body.tothinkid)
+  .then((tothinkChanges) => {
+    if (tothinkChanges.type === "change.getbyitemid.success") {
+      console.log("tothink.gethistory.success");
+      return res.status(200).json({
+        type: "tothink.gethistory.success",
+        data: {
+          history: tothinkChanges.changes,
+        },
+      });
+    } else {
+      console.log("tothink.gethistory.error.notfound");
+      return res.status(101).json({
+        type: "tothink.gethistory.error.notfound",
         data: {
           history: undefined,
         },
       });
+    }
+  })
+  .catch((error) => {
+    console.log("tothink.gethistory.error.onfind");
+    console.error(error);
+    return res.status(400).json({
+      type: "tothink.gethistory.error.onfind",
+      error: error,
+      data: {
+        history: undefined,
+      },
     });
+  });
 };

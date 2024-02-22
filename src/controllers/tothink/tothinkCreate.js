@@ -2,6 +2,7 @@ require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const ToThink = require("../../models/ToThink.js");
 const tothinkContract = require("./tothink.contracts.json")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = tothinkCreate = (req, res, next) => {
   /*
@@ -28,11 +29,6 @@ module.exports = tothinkCreate = (req, res, next) => {
   }
   tothinkToSave = new ToThink( tothinkToSave );
   tothinkToSave.tothinkid = tothinkToSave._id
-  tothinkToSave.history = [{
-    date: new Date(),
-    command: 'create',
-    change: {...tothinkToSave}
-  }]
 
   // Save
   tothinkToSave
@@ -44,6 +40,11 @@ module.exports = tothinkCreate = (req, res, next) => {
         if (tothinkContract.activity[key] === 1) {
           filteredToThink[key] = tothinkToSave._doc[key]
         }
+      })
+      changeCreate(req, {
+        itemid: tothinkToSave.tothinkid, 
+        command: 'create',
+        changes: {...filteredToThink}
       })
       // impacted activities
       return res.status(201).json({
