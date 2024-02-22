@@ -1,7 +1,7 @@
 require("dotenv").config();
 const User = require("../../models/User.js");
 const Activity = require("../../models/Activity.js");
-const Task = require("../../models/Task.js");
+const ToThink = require("../../models/ToThink.js");
 const Setting = require("../../models/Setting.js");
 
 module.exports = adminGetObjectCount = (req, res, next) => {
@@ -14,7 +14,7 @@ module.exports = adminGetObjectCount = (req, res, next) => {
   * admin.databaseload.error.deniedaccess
   * admin.databaseload.error.oncountusers
   * admin.databaseload.error.oncountactivities
-  * admin.databaseload.error.oncounttasks
+  * admin.databaseload.error.oncounttothinks
   * admin.databaseload.error.oncountsettings
   
   */
@@ -35,8 +35,8 @@ module.exports = adminGetObjectCount = (req, res, next) => {
     .then((users) => {
       Activity.count()
         .then((activities) => {
-          // Task.count() // count without break down
-          Task.aggregate([
+          // ToThink.count() // count without break down
+          ToThink.aggregate([
             {
               $group: {
                 _id: '$type',
@@ -44,7 +44,7 @@ module.exports = adminGetObjectCount = (req, res, next) => {
               }
             }
           ]) // count with break down
-            .then((tasks) => {
+            .then((tothinks) => {
               Setting.count()
                 .then((settings) => {
                   res.status(200).json({
@@ -52,7 +52,7 @@ module.exports = adminGetObjectCount = (req, res, next) => {
                     data: {
                       users: users,
                       activities: activities,
-                      tasks: tasks,
+                      tothinks: tothinks,
                       settings: settings,
                     },
                   });
@@ -67,7 +67,7 @@ module.exports = adminGetObjectCount = (req, res, next) => {
             })
             .catch((error) => {
               res.status(400).json({
-                type: "admin.databaseload.error.oncounttasks",
+                type: "admin.databaseload.error.oncounttothinks",
                 error: error,
               });
               console.error(error);

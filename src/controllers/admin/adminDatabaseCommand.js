@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../../models/User.js");
-const Task = require("../../models/Task.js");
+const ToThink = require("../../models/ToThink.js");
 const Activity = require("../../models/Activity.js");
 const Setting = require("../../models/Setting.js");
 
@@ -42,8 +42,8 @@ module.exports = async function adminDatabaseCommand(req, res, next) {
           case "activities":
             collection = Activity;
             break;
-          case "tasks":
-            collection = Task;
+          case "tothinks":
+            collection = ToThink;
             break;
           case "settings":
             collection = Setting;
