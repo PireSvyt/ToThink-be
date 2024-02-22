@@ -55,7 +55,7 @@ module.exports = activityGetMany = (req, res, next) => {
         console.log("activity.getmany.success");
         let requiredActivities = {}
         activities.forEach(activity => {
-          requiredActivities[activity.activityid] = {...activity}
+          requiredActivities[activity.activityid] = {...activity[1]}
         })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredActivities).forEach(activitid => {

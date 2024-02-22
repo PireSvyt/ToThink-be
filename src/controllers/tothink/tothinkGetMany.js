@@ -53,7 +53,7 @@ module.exports = tothinkGetMany = (req, res, next) => {
         console.log("tothink.getmany.success");
         let requiredToThinks = {}
         tothinks.forEach(tothink => {
-          requiredToThinks[tothink.tothinkid] = {...tothink}
+          requiredToThinks[tothink.tothinkid] = {...tothink[1]}
         })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredToThinks).forEach(tothinkid => {

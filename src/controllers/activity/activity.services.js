@@ -14,5 +14,8 @@ module.exports = function complementRequirments (requirements, item) {
             }
         }
     })
+    // Cleanup
+    delete complementedItem.activity
+    // Result
     return complementedItem
 }
