@@ -2,6 +2,7 @@ require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = activityCreate = (req, res, next) => {
   /*
@@ -25,11 +26,6 @@ module.exports = activityCreate = (req, res, next) => {
   activityToSave.owner = req.augmented.user.userid
   activityToSave = new Activity( activityToSave );
   activityToSave.activityid = activityToSave._id
-  activityToSave.history = [{
-    date: new Date(),
-    command: 'create',
-    change: {...activityToSave}
-  }]
 
   // Save
   activityToSave
@@ -41,6 +37,11 @@ module.exports = activityCreate = (req, res, next) => {
         if (activityContract.activity[key] === 1) {
           filteredActivity[key] = activityToSave._doc[key]
         }
+      })
+      changeCreate(req, {
+        itemid: activityToSave.activityid, 
+        command: 'create',
+        changes: {...filteredActivity}
       })
       return res.status(201).json({
         type: "activity.create.success",

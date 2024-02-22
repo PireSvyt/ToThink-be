@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = activityDeleteOne = (req, res, next) => {
   /*
@@ -25,6 +25,10 @@ module.exports = activityDeleteOne = (req, res, next) => {
         deleteOutcome.deletedCount === 1
       ) {
         console.log("activity.deleteone.success");
+        changeCreate(req, {
+          itemid: req.body.activityid, 
+          command: 'delete'
+        })
         return res.status(200).json({
           type: "activity.deleteone.success",
           data: {

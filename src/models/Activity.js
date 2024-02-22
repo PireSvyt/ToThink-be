@@ -13,9 +13,6 @@ const activitySchema = mongoose.Schema(
     name: { type: String, required: true },
     description: { type: String },
     order: { type: Number },
-    history: { 
-      type: Map,
-      of: { date: Date, command: String, change: Object} }
   },
   { strict: true },
 );

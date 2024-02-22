@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const random_id = require("../../resources/random_id.js")
+const changeCreate = require("../change/changeCreate.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -19,7 +19,7 @@ module.exports = activityUpdate = (req, res, next) => {
   }
 
   let activityToSave = { ...req.augmented.activity };
-  let history = [...req.augmented.activity.history]
+
   // Checks
   
 
@@ -28,15 +28,6 @@ module.exports = activityUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     activityUpdate[key] = req.body[key];
   }
-  history.push({
-    date: new Date(),
-    command: 'update',
-    change: {...activityUpdate} 
-  })
-  if (activityUpdate.history === undefined) {
-    activityUpdate.history = []
-  }
-  activityUpdate.history = history
   Activity.findOneAndUpdate(
     { activityid: req.body.activityid }, 
     { $set: activityUpdate },
@@ -49,6 +40,11 @@ module.exports = activityUpdate = (req, res, next) => {
       for (const key of Object.keys(req.body)){
         updatedActivity[key] = newActivityState[key];
       }
+      changeCreate(req, {
+        itemid: activityUpdate.activityid, 
+        command: 'update',
+        changes: {...activityUpdate}
+      })
       return res.status(200).json({
         type: "activity.update.success.modified",
         data:{
