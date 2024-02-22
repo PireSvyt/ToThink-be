@@ -29,6 +29,9 @@ module.exports = tothinkUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     tothinkUpdate[key] = req.body[key];
   }
+  if (tothinkUpdate.history === undefined) {
+    tothinkUpdate.history = {}
+  }
   tothinkUpdate.history[random_id()] = {
     date: new Date(),
     command: 'update',

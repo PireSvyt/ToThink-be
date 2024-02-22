@@ -19,7 +19,9 @@ const tothinkSchema = mongoose.Schema(
     dueDate: { type: Date },
     recurring: { type: Boolean },
     recurrence: { type: Object },
-    history: [ { date: Date, command: String, change: Object} ]
+    history: { 
+      type: Map,
+      of: { date: Date, command: String, change: Object} }
   },
   { strict: true },
 );

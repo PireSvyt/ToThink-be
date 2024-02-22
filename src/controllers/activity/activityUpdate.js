@@ -28,6 +28,9 @@ module.exports = activityUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     activityUpdate[key] = req.body[key];
   }
+  if (activityUpdate.history === undefined) {
+    activityUpdate.history = {}
+  }
   activityUpdate.history[random_id()] = {
     date: new Date(),
     command: 'update',
