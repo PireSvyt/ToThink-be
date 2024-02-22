@@ -6,7 +6,7 @@ const serviceConnectMongoDB = require("./src/database/serviceConnectDatabase.js"
 const authRoutes = require("./src/routes/auth.js");
 const userRoutes = require("./src/routes/user.js");
 const activityRoutes = require("./src/routes/activity.js");
-const taskRoutes = require("./src/routes/task.js");
+const tothinkRoutes = require("./src/routes/tothink.js");
 const adminRoutes = require("./src/routes/admin.js");
 const settingRoutes = require("./src/routes/setting.js");
 
@@ -34,7 +34,7 @@ app.use("/setting", settingRoutes);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/activity", activityRoutes);
-app.use("/task", taskRoutes);
+app.use("/tothink", tothinkRoutes);
 
 // Landing
 app.get("/", (req, res) => {
