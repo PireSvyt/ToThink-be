@@ -20,6 +20,7 @@ module.exports = changeCreate = async (req, change) => {
   changeToSave.changeid = random_string()
   changeToSave.author = req.augmented.user.userid
   changeToSave.date = new Date()
+  changeToSave = new Change( changeToSave );
 
   // Save
   try {
