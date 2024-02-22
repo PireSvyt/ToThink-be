@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
-const complementRequirments = required("./activity.services.js")
+const complementRequirments = require("./activity.services.js")
 
 module.exports = activityGetMany = (req, res, next) => {
   /*
