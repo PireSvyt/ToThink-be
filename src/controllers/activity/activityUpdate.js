@@ -19,7 +19,7 @@ module.exports = activityUpdate = (req, res, next) => {
   }
 
   let activityToSave = { ...req.augmented.activity };
-
+  let history = [...req.augmented.activity.history]
   // Checks
   
 
@@ -28,14 +28,15 @@ module.exports = activityUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     activityUpdate[key] = req.body[key];
   }
-  if (activityUpdate.history === undefined) {
-    activityUpdate.history = {}
-  }
-  activityUpdate.history[random_id()] = {
+  history.push({
     date: new Date(),
     command: 'update',
     change: {...activityUpdate} 
-  };
+  })
+  if (activityUpdate.history === undefined) {
+    activityUpdate.history = []
+  }
+  activityUpdate.history = history
   Activity.findOneAndUpdate(
     { activityid: req.body.activityid }, 
     { $set: activityUpdate },

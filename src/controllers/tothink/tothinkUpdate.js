@@ -20,6 +20,7 @@ module.exports = tothinkUpdate = (req, res, next) => {
   }
 
   let tothinkToSave = { ...req.augmented.tothink };
+  let history = [...req.augmented.tothink.history]
 
   // Checks
   
@@ -29,14 +30,16 @@ module.exports = tothinkUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     tothinkUpdate[key] = req.body[key];
   }
-  if (tothinkUpdate.history === undefined) {
-    tothinkUpdate.history = {}
-  }
-  tothinkUpdate.history[random_id()] = {
+  history.push({
     date: new Date(),
     command: 'update',
     change: {...tothinkUpdate} 
-  };
+  })
+  if (tothinkUpdate.history === undefined) {
+    tothinkUpdate.history = []
+  }
+  tothinkUpdate.history = history
+
   ToThink.findOneAndUpdate(
     { tothinkid: req.body.tothinkid }, 
     { $set: tothinkUpdate }, 
