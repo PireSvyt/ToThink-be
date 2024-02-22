@@ -8,9 +8,9 @@ module.exports = tothinkGetOne = (req, res, next) => {
   sends back the tothink value
   
   possible response types
-  * tothink.get.success
-  * tothink.get.error.notfound
-  * tothink.get.error.onfind
+  * tothink.getone.success
+  * tothink.getone.error.notfound
+  * tothink.getone.error.onfind
   
   */
 
@@ -40,17 +40,17 @@ module.exports = tothinkGetOne = (req, res, next) => {
     },
   ]).then((tothink) => {
       if (tothink !== undefined) {
-        console.log("tothink.get.success");
+        console.log("tothink.getone.success");
         return res.status(200).json({
-          type: "tothink.get.success",
+          type: "tothink.getone.success",
           data: {
             tothink: tothink,
           },
         });
       } else {
-        console.log("tothink.get.error.notfound");
+        console.log("tothink.getone.error.notfound");
         return res.status(101).json({
-          type: "tothink.get.error.notfound",
+          type: "tothink.getone.error.notfound",
           data: {
             tothink: undefined,
           },
@@ -58,10 +58,10 @@ module.exports = tothinkGetOne = (req, res, next) => {
       }
     })
     .catch((error) => {
-      console.log("tothink.get.error.onfind");
+      console.log("tothink.getone.error.onfind");
       console.error(error);
       return res.status(400).json({
-        type: "tothink.get.error.onfind",
+        type: "tothink.getone.error.onfind",
         error: error,
         data: {
           tothink: undefined,

@@ -1,18 +1,24 @@
 {
-    "tothink": {
-        "_id": 0,
-        "tothinkid": 1,
-        "activityid": 1,
-        "name": 1,
-        "state": 1,
-        "description": 1,
-        "activity": 1,
-        "order": 1
-      },
-      "activity": {
-        "_id": 0,
-        "activityid": 1,
-        "name": 1,
-        "order": 1
-      }
+  "tothink": {
+    "_id": 0,
+    "tothinkid": 1,
+    "activityid": 1,
+    "name": 1,
+    "state": 1,
+    "description": 1,
+    "activity": 1,
+    "order": 1,
+    "dueDate": 1,
+    "recurring": 1,
+    "recurrence": 1
+  },
+  "activity": {
+    "_id": 0,
+    "activityid": 1,
+    "name": 1,
+    "order": 1
+  },
+  "values": {
+    "state": ["tothink", "wip", "planned", "expired", "discarded"]
+  }
 }

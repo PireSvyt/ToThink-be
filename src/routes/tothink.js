@@ -10,6 +10,7 @@ const tothinkUpdate = require("../controllers/tothink/tothinkUpdate.js");
 const tothinkGetOne = require("../controllers/tothink/tothinkGetOne.js");
 const tothinkGetMany = require("../controllers/tothink/tothinkGetMany.js");
 const tothinkDeleteOne = require("../controllers/tothink/tothinkDeleteOne.js");
+const tothinkGetHistory = require("../controllers/tothink/tothinkGetHistory.js");
 
 router.post(
   "/v1/create",
@@ -38,6 +39,12 @@ router.post(
   authAuthenticate,
   authAuthenticateOwner,
   tothinkDeleteOne,
+);
+router.post(
+  "/v1/gethistory",
+  authAuthenticate,
+  authAuthenticateOwner,
+  tothinkGetHistory,
 );
 
 module.exports = router;

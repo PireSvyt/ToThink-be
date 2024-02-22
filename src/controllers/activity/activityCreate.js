@@ -25,6 +25,11 @@ module.exports = activityCreate = (req, res, next) => {
   activityToSave.owner = req.augmented.user.userid
   activityToSave = new Activity( activityToSave );
   activityToSave.activityid = activityToSave._id
+  activityToSave.history = [{
+    date: new Date(),
+    command: 'create',
+    change: {...activityToSave}
+  }]
 
   // Save
   activityToSave

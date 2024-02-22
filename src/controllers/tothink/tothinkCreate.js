@@ -28,6 +28,11 @@ module.exports = tothinkCreate = (req, res, next) => {
   }
   tothinkToSave = new ToThink( tothinkToSave );
   tothinkToSave.tothinkid = tothinkToSave._id
+  tothinkToSave.history = [{
+    date: new Date(),
+    command: 'create',
+    change: {...tothinkToSave}
+  }]
 
   // Save
   tothinkToSave

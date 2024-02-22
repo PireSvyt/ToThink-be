@@ -1,8 +1,5 @@
 require("dotenv").config();
-const jwt_decode = require("jwt-decode");
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
-const activityGetOne = require("./activityGetOne.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -33,6 +30,13 @@ module.exports = activityUpdate = (req, res, next) => {
   Activity.findOneAndUpdate(
     { activityid: req.body.activityid }, 
     { $set: activityUpdate }, 
+    { $push: { 
+      history: {
+        date: new Date(),
+        command: 'update',
+        change: {...activityUpdate} 
+      }}
+    },
     { new: true })
     .then(newActivityState => {
       console.log("activity.update.success.modified", activityUpdate);

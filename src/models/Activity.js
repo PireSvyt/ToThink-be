@@ -12,7 +12,8 @@ const activitySchema = mongoose.Schema(
     owner: { type: String, required: true },
     name: { type: String, required: true },
     description: { type: String },
-    order: { type: Number }
+    order: { type: Number },
+    history: [ { date: Date, command: String, change: Object} ]
   },
   { strict: true },
 );
