@@ -59,10 +59,11 @@ module.exports = activityGetMany = (req, res, next) => {
         })
         if (req.body.requirements !== undefined) {
           Object.keys(requiredActivities).forEach(activitid => {
-            requiredActivities[activitid] = complementRequirments(
+            let requiredActivity = complementRequirments(
               [...req.body.requirements], 
               requiredActivities[activitid]
             )
+            requiredActivities[activitid] = {...requiredActivity}
           })
         }
         return res.status(200).json({
