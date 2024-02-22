@@ -1,7 +1,6 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const random_string = require("../../resources/random_string.js");
-const tothinkContract = require("./tothink.contracts.json")
+const random_id = require("../../resources/random_id.js")
 
 module.exports = tothinkUpdate = (req, res, next) => {
   /*
@@ -30,7 +29,7 @@ module.exports = tothinkUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     tothinkUpdate[key] = req.body[key];
   }
-  tothinkUpdate.history[random_string()] = {
+  tothinkUpdate.history[random_id()] = {
     date: new Date(),
     command: 'update',
     change: {...tothinkUpdate} 

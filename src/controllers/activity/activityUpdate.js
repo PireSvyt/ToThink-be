@@ -1,5 +1,6 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
+const random_id = require("../../resources/random_id.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -27,7 +28,7 @@ module.exports = activityUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     activityUpdate[key] = req.body[key];
   }
-  activityUpdate.history[random_string()] = {
+  activityUpdate.history[random_id()] = {
     date: new Date(),
     command: 'update',
     change: {...activityUpdate} 
