@@ -31,6 +31,7 @@ module.exports = tothinkUpdate = (req, res, next) => {
   }
   ToThink.findOneAndUpdate(
     { tothinkid: req.body.tothinkid }, 
+    { $set: tothinkUpdate }, 
     { $push: { 
       history: {
         date: new Date(),
@@ -38,7 +39,6 @@ module.exports = tothinkUpdate = (req, res, next) => {
         change: {...tothinkUpdate} 
       }}
     },
-    { $set: tothinkUpdate }, 
     { new: true })
     .then(newToThinkState => {
       console.log("tothink.update.success.modified");

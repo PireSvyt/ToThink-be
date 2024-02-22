@@ -29,6 +29,7 @@ module.exports = activityUpdate = (req, res, next) => {
   }
   Activity.findOneAndUpdate(
     { activityid: req.body.activityid }, 
+    { $set: activityUpdate }, 
     { $push: { 
       history: {
         date: new Date(),
@@ -36,7 +37,6 @@ module.exports = activityUpdate = (req, res, next) => {
         change: {...activityUpdate} 
       }}
     },
-    { $set: activityUpdate }, 
     { new: true })
     .then(newActivityState => {
       console.log("activity.update.success.modified");
