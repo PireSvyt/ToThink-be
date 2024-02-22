@@ -1,6 +1,6 @@
 require("dotenv").config();
 const User = require("../../models/User.js");
-const Task = require("../../models/Task.js");
+const ToThink = require("../../models/ToThink.js");
 const Activity = require("../../models/Activity.js");
 
 module.exports = authAuthenticateOwner = (req, res, next) => {
@@ -26,14 +26,14 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
     let match = {};
     let item = undefined;
 
-    if (req.body.taskid !== undefined) {
-      collection = Task;
-      item = "task"
+    if (req.body.tothinkid !== undefined) {
+      collection = ToThink;
+      item = "tothink"
       match['owner'] = {
         $in: [ req.augmented.user.userid ],
       };
-      match['taskid'] = {
-        $in: [ req.body.taskid ],
+      match['tothinkid'] = {
+        $in: [ req.body.tothinkid ],
       };
     } else {
       if (req.body.activityid !== undefined) {

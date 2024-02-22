@@ -10,12 +10,12 @@
         "activityid": 1,
         "name": 1,
         "description": 1,
-        "tasks": 1,
+        "tothinks": 1,
         "order": 1
     },
-    "tasks": {
+    "tothinks": {
         "_id": 0,
-        "taskid": 1,
+        "tothinkid": 1,
         "name": 1,
         "state": 1,
         "order": 1

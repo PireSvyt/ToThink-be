@@ -24,13 +24,13 @@ module.exports = activityGetOne = (req, res, next) => {
     },
     {
       $lookup: {
-        from: "tasks",
+        from: "tothinks",
         foreignField: "activityid",
         localField: "activityid",
-        as: "tasks",
+        as: "tothinks",
         pipeline: [
           {
-            $project: activityContract.tasks,
+            $project: activityContract.tothinks,
           },
           {
             $sort: { order: -1 }

@@ -33,13 +33,13 @@ module.exports = activityGetMany = (req, res, next) => {
     },
     {
       $lookup: {
-        from: "tasks",
+        from: "tothinks",
         foreignField: "activityid",
         localField: "activityid",
-        as: "tasks",
+        as: "tothinks",
         pipeline: [
           {
-            $project: activityContract.tasks,
+            $project: activityContract.tothinks,
           },
         ],
       },
@@ -65,7 +65,7 @@ module.exports = activityGetMany = (req, res, next) => {
                   case 'description': 
                     requiredActivities[activitid][requirement] = ''
                     break
-                  case 'tasks': 
+                  case 'tothinks': 
                     requiredActivities[activitid][requirement] = []
                     break
                 }

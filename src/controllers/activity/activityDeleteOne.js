@@ -9,7 +9,7 @@ module.exports = activityDeleteOne = (req, res, next) => {
   
   possible response types
   * activity.deleteone.success
-  * activity.deleteone.error.ondeletetasks
+  * activity.deleteone.error.ondeletetothinks
   * activity.deleteone.error.ondeleteactivity
   
   */

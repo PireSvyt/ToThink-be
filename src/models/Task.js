@@ -5,10 +5,10 @@ if (process.env.MONGOOSE_DEBUG === "TRUE") {
   mongoose.set("debug", true);
 }
 
-const taskSchema = mongoose.Schema(
+const tothinkSchema = mongoose.Schema(
   {
     schema: { type: String },
-    taskid: { type: String, required: true, unique: true },
+    tothinkid: { type: String, required: true, unique: true },
     owner: { type: String, required: true },
     activityid: { type: String, required: true },
     state: { type: String, required: true, enum: [ 'tothink', 'todo', 'wip', 'block', 'done'] },
@@ -19,6 +19,6 @@ const taskSchema = mongoose.Schema(
   { strict: true },
 );
 
-taskSchema.plugin(uniqueValidator);
+tothinkSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model("Task", taskSchema);
+module.exports = mongoose.model("ToThink", tothinkSchema);
