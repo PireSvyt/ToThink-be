@@ -27,16 +27,14 @@ module.exports = activityUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     activityUpdate[key] = req.body[key];
   }
+  activityUpdate.history[random_string()] = {
+    date: new Date(),
+    command: 'update',
+    change: {...activityUpdate} 
+  };
   Activity.findOneAndUpdate(
     { activityid: req.body.activityid }, 
-    { $set: activityUpdate }, 
-    { $push: { 
-      history: {
-        date: new Date(),
-        command: 'update',
-        change: {...activityUpdate} 
-      }}
-    },
+    { $set: activityUpdate },
     { new: true })
     .then(newActivityState => {
       console.log("activity.update.success.modified");

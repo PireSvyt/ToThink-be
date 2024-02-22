@@ -1,5 +1,6 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
+const random_string = require("../../resources/random_string.js");
 const tothinkContract = require("./tothink.contracts.json")
 
 module.exports = tothinkUpdate = (req, res, next) => {
@@ -29,16 +30,14 @@ module.exports = tothinkUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     tothinkUpdate[key] = req.body[key];
   }
+  tothinkUpdate.history[random_string()] = {
+    date: new Date(),
+    command: 'update',
+    change: {...tothinkUpdate} 
+  };
   ToThink.findOneAndUpdate(
     { tothinkid: req.body.tothinkid }, 
     { $set: tothinkUpdate }, 
-    { $push: { 
-      history: {
-        date: new Date(),
-        command: 'update',
-        change: {...tothinkUpdate} 
-      }}
-    },
     { new: true })
     .then(newToThinkState => {
       console.log("tothink.update.success.modified");
