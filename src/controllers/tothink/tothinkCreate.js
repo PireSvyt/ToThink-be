@@ -22,11 +22,11 @@ module.exports = tothinkCreate = (req, res, next) => {
   }
 
   // Save
-  let tothinkToSave = { ...req.body }
+  let tothinkToSave = { ...req.body.tothink }
   tothinkToSave.tothinkid = random_string()
   tothinkToSave.owner = req.augmented.user.userid
   if (tothinkToSave.state === undefined) {
-    tothinkToSave.state = "tothink"
+    tothinkToSave.state = null
   }
   tothinkToSave = new ToThink( tothinkToSave );
   tothinkToSave.tothinkid = tothinkToSave._id

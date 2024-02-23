@@ -22,7 +22,7 @@ module.exports = activityCreate = (req, res, next) => {
   }
 
   // Save
-  let activityToSave = { ...req.body }
+  let activityToSave = { ...req.body.activity }
   activityToSave.activityid = random_string()
   activityToSave.owner = req.augmented.user.userid
   activityToSave = new Activity( activityToSave );
@@ -57,7 +57,7 @@ module.exports = activityCreate = (req, res, next) => {
       } else {
         requiredActivity = filteredActivity
       }
-      
+
       // Response
       return res.status(201).json({
         type: "activity.create.success",

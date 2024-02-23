@@ -19,6 +19,6 @@
     "order": 1
   },
   "values": {
-    "state": ["tothink", "wip", "planned", "expired", "discarded"]
+    "state": [null, "tothink", "wip", "planned", "expired", "discarded"]
   }
 }
