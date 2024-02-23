@@ -1,6 +1,7 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
 const changeCreate = require("../change/changeCreate.js")
+const complementRequirments = require("./tothink.services.js")
 
 module.exports = tothinkUpdate = (req, res, next) => {
   /*
@@ -20,7 +21,6 @@ module.exports = tothinkUpdate = (req, res, next) => {
   }
 
   let tothinkToSave = { ...req.augmented.tothink };
-  let history = [...req.augmented.tothink.history]
 
   // Checks
   
@@ -30,28 +30,21 @@ module.exports = tothinkUpdate = (req, res, next) => {
   for (const key of Object.keys(req.body)){
     tothinkUpdate[key] = req.body[key];
   }
-  history.push({
-    date: new Date(),
-    command: 'update',
-    change: {...tothinkUpdate} 
-  })
-  if (tothinkUpdate.history === undefined) {
-    tothinkUpdate.history = []
-  }
-  tothinkUpdate.history = history
-
   ToThink.findOneAndUpdate(
     { tothinkid: req.body.tothinkid }, 
     { $set: tothinkUpdate }, 
     { new: true })
     .then(newToThinkState => {
       console.log("tothink.update.success.modified");
-      console.log("from:", tothinkUpdate);
-      console.log("to  :", newToThinkState);
+      //console.log("from:", tothinkUpdate);
+      //console.log("to  :", newToThinkState);
+      
+      // Outcome
       let updatedToThink = {}
       for (const key of Object.keys(req.body)){
         updatedToThink[key] = newToThinkState[key];
       }
+
       // Impacted activities
       let activityids = []
       if (req.augmented.tothink.activityid !== updatedToThink.activityid) {
@@ -62,15 +55,28 @@ module.exports = tothinkUpdate = (req, res, next) => {
           activityids.push(req.augmented.tothink.activityid)
         }
       }      
+
+      // Change track
       changeCreate(req, {
         itemid: tothinkUpdate.tothinkid, 
         command: 'update',
         changes: {...tothinkUpdate}
       })
+
+      // Meet requirements
+      let requiredToThink = {}
+      if (req.body.requirements !== undefined) {
+        requiredToThink = complementRequirments(req.body.requirements, updatedToThink)
+        //console.log("requiredToThink", requiredToThink)
+      } else {
+        requiredToThink = updatedToThink
+      }
+
+      // Response
       return res.status(200).json({
         type: "tothink.update.success.modified",
         data:{
-          update: updatedToThink,
+          update: requiredToThink,
           dependencies: {
             activityids: activityids
           }

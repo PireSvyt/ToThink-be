@@ -3,6 +3,7 @@ const random_string = require("../../resources/random_string.js");
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
 const changeCreate = require("../change/changeCreate.js")
+const complementRequirments = require("./activity.services.js")
 
 module.exports = activityCreate = (req, res, next) => {
   /*
@@ -32,21 +33,36 @@ module.exports = activityCreate = (req, res, next) => {
     .save()
     .then(() => {
       console.log("activity.create.success", activityToSave);
+
+      // Filter
       let filteredActivity = {}
       Object.keys(activityToSave._doc).forEach(key => {
         if (activityContract.activity[key] === 1) {
           filteredActivity[key] = activityToSave._doc[key]
         }
       })
+
+      // Change track
       changeCreate(req, {
         itemid: activityToSave.activityid, 
         command: 'create',
         changes: {...filteredActivity}
       })
+
+      // Meet requirements
+      let requiredActivity = {}
+      if (req.body.requirements !== undefined) {
+        requiredActivity = complementRequirments(req.body.requirements, filteredActivity)
+        //console.log("requiredActivity", requiredActivity)
+      } else {
+        requiredActivity = filteredActivity
+      }
+      
+      // Response
       return res.status(201).json({
         type: "activity.create.success",
         data: {
-          activity: filteredActivity,
+          activity: requiredActivity,
         },
       });
     })

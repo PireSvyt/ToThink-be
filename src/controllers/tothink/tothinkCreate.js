@@ -3,6 +3,7 @@ const random_string = require("../../resources/random_string.js");
 const ToThink = require("../../models/ToThink.js");
 const tothinkContract = require("./tothink.contracts.json")
 const changeCreate = require("../change/changeCreate.js")
+const complementRequirments = require("./tothink.services.js")
 
 module.exports = tothinkCreate = (req, res, next) => {
   /*
@@ -35,27 +36,42 @@ module.exports = tothinkCreate = (req, res, next) => {
     .save()
     .then(() => {
       console.log("tothink.create.success");
+
+      // Filtering
       let filteredToThink = {}
       Object.keys(tothinkToSave._doc).forEach(key => {
         if (tothinkContract.activity[key] === 1) {
           filteredToThink[key] = tothinkToSave._doc[key]
         }
       })
+
+      // Change track
       changeCreate(req, {
         itemid: tothinkToSave.tothinkid, 
         command: 'create',
         changes: {...filteredToThink}
       })
-      // impacted activities
+
+      // Meet requirements
+      let requiredToThink = {}
+      if (req.body.requirements !== undefined) {
+        requiredToThink = complementRequirments(req.body.requirements, filteredToThink)
+        //console.log("requiredToThink", requiredToThink)
+      } else {
+        requiredToThink = filteredToThink
+      }
+
+      // Response
       return res.status(201).json({
         type: "tothink.create.success",
         data: {
-          tothink: filteredToThink,
+          tothink: requiredToThink,
           dependencies: {
             activityids: [filteredToThink.activityid]
           }
         },
       });
+
     })
     .catch((error) => {
       console.log("tothink.create.error.oncreate");
