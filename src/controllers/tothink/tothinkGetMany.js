@@ -56,12 +56,12 @@ module.exports = tothinkGetMany = (req, res, next) => {
           requiredToThinks[tothink.tothinkid] = {...tothink[1]}
         })
         if (req.body.requirements !== undefined) {
-          Object.keys(requiredToThinks).forEach(tothinkid => {
+          Object.entries(requiredToThinks).forEach(tothink => {
             let requiredToThink = complementRequirments(
               [...req.body.requirements], 
-              requiredToThinks[tothinkid]
+              tothink
             )
-            requiredToThinks[tothinkid] = {...requiredToThink}
+            requiredToThinks[tothink.tothinkid] = {...requiredToThink}
           })
         }
         return res.status(200).json({
