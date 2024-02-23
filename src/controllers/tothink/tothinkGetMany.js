@@ -50,20 +50,18 @@ module.exports = tothinkGetMany = (req, res, next) => {
     },
   ]).then((tothinks) => {
       if (tothinks !== undefined) {
-        console.log("tothink.getmany.success");
+        console.log("tothink.getmany.success");   
         let requiredToThinks = {}
         tothinks.forEach(tothink => {
-          requiredToThinks[tothink.tothinkid] = {...tothink[1]}
-        })
-        if (req.body.requirements !== undefined) {
-          Object.entries(requiredToThinks).forEach(tothink => {
-            let requiredToThink = complementRequirments(
-              [...req.body.requirements], 
-              tothink
-            )
+          let requiredToThink = {}
+          if (req.body.requirements !== undefined) {
+            requiredToThink = complementRequirments([...req.body.requirements], tothink)
+            //console.log("requiredToThink", requiredToThink)
             requiredToThinks[tothink.tothinkid] = {...requiredToThink}
-          })
-        }
+          } else {
+            requiredToThinks[tothink.tothinkid] = {...tothink}
+          }
+        })
         return res.status(200).json({
           type: "tothink.getmany.success",
           data: {

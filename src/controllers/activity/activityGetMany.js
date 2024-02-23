@@ -55,14 +55,11 @@ module.exports = activityGetMany = (req, res, next) => {
         console.log("activity.getmany.success");
         let requiredActivities = {}
         activities.forEach(activity => {
-          console.log("foreach", activity)
+          //console.log("foreach", activity)
           let requiredActivity = {}
           if (req.body.requirements !== undefined) {
-            requiredActivity = complementRequirments(
-              req.body.requirements, 
-              {...activity}
-            )
-            console.log("requiredActivity", requiredActivity)
+            requiredActivity = complementRequirments(req.body.requirements, activity)
+            //console.log("requiredActivity", requiredActivity)
             requiredActivities[activity.activityid] = {...requiredActivity}
           } else {
             requiredActivities[activity.activityid] = {...activity}
