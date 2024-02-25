@@ -11,7 +11,7 @@ const activityGetOne = require("../controllers/activity/activityGetOne.js");
 const activityGetMany = require("../controllers/activity/activityGetMany.js");
 const activityGetMine = require("../controllers/activity/activityGetMine.js");
 const activityDeleteOne = require("../controllers/activity/activityDeleteOne.js");
-const activityGetHistory = require("../controllers/activity/activityGetHistory.js");
+const activityGetChanges = require("../controllers/activity/activityGetChanges.js");
 
 router.post(
   "/v1/create",
@@ -50,7 +50,7 @@ router.post(
   "/v1/gethistory",
   authAuthenticate,
   authAuthenticateOwner,
-  activityGetHistory,
+  activityGetChanges,
 );
 
 module.exports = router;
