@@ -1,7 +1,6 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Setting = require("../../models/Setting.js");
-const { checkCreateInputs } = require("./setting.services.js")
 const {
   checkCreateInputs, 
   complementRequirments, 
