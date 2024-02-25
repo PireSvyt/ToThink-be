@@ -1,6 +1,5 @@
 require("dotenv").config();
 const Setting = require("../../models/Setting.js");
-const changeCreate = require("../change/changeCreate.js")
 const { 
   complementRequirments,
   filterSetting
@@ -25,7 +24,7 @@ module.exports = settingUpdate = (req, res, next) => {
   let settingToSave = { ...req.augmented.setting };
 
   // Checks
-  
+
 
   // Update
   const settingUpdate = {};

@@ -4,7 +4,7 @@ const Setting = require("../../models/Setting.js");
 const {
   checkCreateInputs, 
   complementRequirments, 
-  filterSetting} = require("./tothink.services.js")
+  filterSetting} = require("./setting.services.js")
 
 module.exports = settingCreate = (req, res, next) => {
   /*
