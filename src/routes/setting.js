@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const authAuthenticate = require("../controllers/auth/authAuthenticate.js");
+//const adminAuthenticate = require("../controllers/admin/adminAuthenticate.js");
 const authAuthenticateOwner = require("../controllers/auth/authAuthenticateOwner.js");
 
 const settingCreate = require("../controllers/setting/settingCreate.js");

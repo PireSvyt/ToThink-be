@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
-const { 
-  getStateList
-} = require("./tothink.services.js")
 
 if (process.env.MONGOOSE_DEBUG === "TRUE") {
   mongoose.set("debug", true);

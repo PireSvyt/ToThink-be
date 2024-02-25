@@ -25,6 +25,10 @@ module.exports = settingCreate = (req, res, next) => {
 
   let settingToSave = { ...req.body };
   /*
+  {
+    key: { type: String, required: true },
+    value: {  },
+  }
   */
   // Checks
   let errors = checkCreateInputs(activityToSave)
@@ -37,7 +41,9 @@ module.exports = settingCreate = (req, res, next) => {
 
   // Auto fields
   settingToSave.settingid = random_string()
+  settingToSave.audience = req.augmented.user.userid
   settingToSave = new Setting(settingToSave);
+  settingToSave.settingid = settingToSave._id
 
   // Save
   settingToSave
