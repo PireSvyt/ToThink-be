@@ -1,7 +1,11 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const tothinkContract = require("./tothink.contracts.json")
-const complementRequirments = require("./tothink.services.js")
+const { 
+  getTothinkContractForToThink, 
+  getTothinkContractForActivity, 
+  filterToThink, 
+  complementRequirments 
+} = require("./tothink.services.js")
 
 module.exports = tothinkGetMany = (req, res, next) => {
   /*
@@ -40,45 +44,35 @@ module.exports = tothinkGetMany = (req, res, next) => {
         as: "activity",
         pipeline: [
           {
-            $project: tothinkContract.activity,
+            $project: getTothinkContractForActivity(),
           },
         ],
       },
     },
     {
-      $project: tothinkContract.tothink,
+      $project: getTothinkContractForToThink(),
     },
   ]).then((tothinks) => {
       if (tothinks !== undefined) {
         console.log("tothink.getmany.success");  
+        
+        // Meet requirements
         let requiredToThinks = {}
         tothinks.forEach(tothink => {
-          //console.log("foreach", tothink)
-
-          // Filter
-          let filteredToThink = {}
-          Object.keys(tothink).forEach(key => {
-            if (tothinkContract.tothink[key] === 1) {
-              filteredToThink[key] = tothink[key]
-            }
-          })
-
-          // Meet requirements
-          let requiredToThink = {}
-          if (req.body.requirements !== undefined) {
-            requiredToThink = complementRequirments([...req.body.requirements], filteredToThink)
-            //console.log("requiredToThink", requiredToThink)
-            requiredToThinks[tothink.tothinkid] = {...requiredToThink}
-          } else {
-            requiredToThinks[tothink.tothinkid] = {...filteredToThink}
-          }
-
+          requiredToThinks[tothink.tothinkid] = {...complementRequirments([...req.body.requirements], tothink)}
         })
+
+        // Filter
+        let filteredTothinks = {}
+        tothinks.forEach(tothink => {
+          filteredTothinks[tothink.tothinkid] = filterToThink({...requiredToThinks[tothink.tothinkid]})
+        })
+
         // Response
         return res.status(200).json({
           type: "tothink.getmany.success",
           data: {
-            tothinks: requiredToThinks,
+            tothinks: filteredTothinks,
           },
         });
       } else {

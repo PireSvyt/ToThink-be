@@ -1,9 +1,12 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
 const changeCreate = require("../change/changeCreate.js")
-const complementRequirments = require("./activity.services.js")
+const { 
+  checkCreateInputs,
+  complementRequirments, 
+  filterActivity 
+} = require("./activity.services.js")
 
 module.exports = activityCreate = (req, res, next) => {
   /*
@@ -12,6 +15,7 @@ module.exports = activityCreate = (req, res, next) => {
   
   possible response types 
   * activity.create.success
+  * activity.create.error.inputs
   * activity.create.error.oncreate
   * activity.create.error.idprovided
   
@@ -21,8 +25,24 @@ module.exports = activityCreate = (req, res, next) => {
     console.log("activity.create");
   }
 
-  // Save
   let activityToSave = { ...req.body.activity }
+  /*
+  {
+    activityid: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    order: { type: Number },
+  }
+  */
+  // Checks
+  let errors = checkCreateInputs(activityToSave)
+  if (errors.length > 0) {    
+    return res.status(403).json({
+      type: "activity.create.error.inputs",
+      errors: errors
+    });
+  }
+
+  // Auto fields
   activityToSave.activityid = random_string()
   activityToSave.owner = req.augmented.user.userid
   activityToSave = new Activity( activityToSave );
@@ -34,35 +54,24 @@ module.exports = activityCreate = (req, res, next) => {
     .then(() => {
       console.log("activity.create.success", activityToSave);
 
-      // Filter
-      let filteredActivity = {}
-      Object.keys(activityToSave._doc).forEach(key => {
-        if (activityContract.activity[key] === 1) {
-          filteredActivity[key] = activityToSave._doc[key]
-        }
-      })
+      // Meet requirements
+      let requiredActivity = complementRequirments(req.body.requirements, activityToSave)
 
       // Change track
       changeCreate(req, {
         itemid: activityToSave.activityid, 
         command: 'create',
-        changes: {...filteredActivity}
+        changes: {...requiredActivity}
       })
 
-      // Meet requirements
-      let requiredActivity = {}
-      if (req.body.requirements !== undefined) {
-        requiredActivity = complementRequirments(req.body.requirements, filteredActivity)
-        //console.log("requiredActivity", requiredActivity)
-      } else {
-        requiredActivity = filteredActivity
-      }
+      // Filter
+      let filteredActivity = filterActivity({...requiredActivity})
 
       // Response
       return res.status(201).json({
         type: "activity.create.success",
         data: {
-          activity: requiredActivity,
+          activity: filteredActivity,
         },
       });
     })

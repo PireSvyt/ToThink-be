@@ -1,6 +1,11 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Setting = require("../../models/Setting.js");
+const { checkCreateInputs } = require("./setting.services.js")
+const {
+  checkCreateInputs, 
+  complementRequirments, 
+  Setting} = require("./tothink.services.js")
 
 module.exports = settingCreate = (req, res, next) => {
   /*
@@ -18,8 +23,19 @@ module.exports = settingCreate = (req, res, next) => {
     console.log("setting.create");
   }
 
-  // Save
   let settingToSave = { ...req.body };
+  /*
+  */
+  // Checks
+  let errors = checkCreateInputs(activityToSave)
+  if (errors.length > 0) {    
+    return res.status(403).json({
+      type: "setting.create.error.inputs",
+      errors: errors
+    });
+  }
+
+  // Auto fields
   settingToSave.settingid = random_string()
   settingToSave = new Setting(settingToSave);
 
@@ -28,10 +44,19 @@ module.exports = settingCreate = (req, res, next) => {
     .save()
     .then(() => {
       console.log("setting.create.success");
+
+      // Meet requirements
+      let requiredSetting = complementRequirments(req.body.requirements, {...settingToSave._doc})
+
+      // No change track
+
+      // Filtering
+      let filteredSetting = filterSetting({...requiredSetting})
+
       return res.status(201).json({
         type: "setting.create.success",
         data: {
-          settingid: settingToSave.settingid,
+          setting: filteredSetting,
         },
       });
     })

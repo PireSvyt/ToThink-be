@@ -1,5 +1,10 @@
 require("dotenv").config();
 const Setting = require("../../models/Setting.js");
+const { 
+  getSettingContractForSetting, 
+  filterSetting, 
+  complementRequirments 
+} = require("./setting.services.js")
 
 module.exports = settingGetMany = (req, res, next) => {
   /*
@@ -17,14 +22,43 @@ module.exports = settingGetMany = (req, res, next) => {
     console.log("setting.getmany");
   }
 
-  Setting.find({})
-    .then((settings) => {
+  let match = { owner: { $in: [ req.augmented.user.userid, 'allUsers' ] } }
+  if (req.body.settingids !== undefined) {
+    if (req.body.settingids.length !== 0) {
+      match.settingid = {
+        $in: req.body.settingids,
+      }
+    }
+  }
+
+  Setting.aggregate([
+    {
+      $match: match,
+    },
+    {
+      $project: getSettingContractForSetting(),
+    },
+  ]).then((settings) => {
       if (settings !== undefined) {
         console.log("setting.get.success");
+        
+        // Meet requirements
+        let requiredSettings = {}
+        settings.forEach(setting => {
+          requiredSettings[setting.settingid] = {...complementRequirments([...req.body.requirements], setting)}
+        })
+
+        // Filter
+        let filteredTothinks = {}
+        settings.forEach(setting => {
+          filteredTothinks[setting.settingid] = filterSetting({...requiredSettings[setting.settingid]})
+        })
+
+        // Response
         return res.status(200).json({
           type: "setting.getmany.success",
           data: {
-            settings: settings,
+            settings: filteredTothinks,
           },
         });
       } else {

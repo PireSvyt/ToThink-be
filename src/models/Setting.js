@@ -9,9 +9,9 @@ const settingSchema = mongoose.Schema(
   {
     schema: { type: String },
     settingid: { type: String, required: true, unique: true },
-    type: { type: String, required: true, enum: ['string'] },
+    audience: { type: String, required: true }, // userid OR 'allUsers'
     key: { type: String, required: true, unique: true },
-    value: { type: String, required: true },
+    value: {  },
   },
   { strict: true },
 );

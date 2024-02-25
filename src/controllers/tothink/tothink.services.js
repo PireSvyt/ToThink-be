@@ -1,25 +1,127 @@
 
+let tothinkContract = {
+    "_id": 0,
+    "tothinkid": 1,
+    "activityid": 1,
+    "name": 1,
+    "state": 1,
+    "description": 1,
+    "activity": 1, // TODO : to remove?
+    "order": 1,
+    "reminders": 1,
+    "todos": 1,
+}
+let activityContract = {
+    "_id": 0,
+    "activityid": 1,
+    "name": 1,
+}
+let states = [
+    { 
+        "value": "tothink",
+        "if": (item) => {
+            if (item.reminders !== undefined) {
+             if (item.reminders.length === 0) {
+                return true
+             }
+             // OR
+             if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length > 0) {
+                return true
+             }
+            }
+            return false
+        }
+    },
+    { 
+        "value": "planned",
+        "if": (item) => {
+            if (item.reminders !== undefined) {
+             if (item.reminders.filter(reminder => {reminder.state === 'active'}).length > 0) {
+                if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length === 0) {
+                    return true
+                }
+             }
+            }
+            return false
+        },
+    },
+    { 
+        "value": "over",
+        "if": (item) => {
+            if (item.reminders !== undefined) {
+                if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length === 0) {
+                    if (item.reminders.filter(reminder => {reminder.state === 'inactive'}).length > 0) {
+                        return true
+                    }
+                    // OR
+                    if (item.reminders.filter(reminder => {reminder.state === 'over'}).length === 0) {
+                        return true
+                    }
+                    return false
+                }
+             
+            }
+            return false
+        },
+    }
+]
+
+module.exports = function checkCreateInputs (tothink) {
+    let errors = []
+    if (tothink.activityid === "") {
+    errors.push("missing activityid")
+    }
+    /*if (tothinkToSave.order === 0 || tothinkToSave.order === undefined || tothinkToSave.order === null) {
+    errors.push("invalid order")
+    }*/
+    return errors
+}
+module.exports = function getTothinkContractForToThink () {
+    return tothinkContract
+}
+module.exports = function getTothinkContractForActivity () {
+    return activityContract
+}
+module.exports = function getStateList () {
+    return states.map(state => state.value)
+}
+module.exports = function getToThinkStates () {
+    return states
+}
+module.exports = function filterToThink (tothink) {
+    let filteredToThink = {}
+    Object.keys(tothink).forEach(key => {
+      if (activityContract[key] === 1) {
+        filteredToThink[key] = tothink[key]
+      }
+    })
+    return filteredToThink
+}
 module.exports = function complementRequirments (requirements, item) {
     let complementedItem = {...item}
-    requirements.forEach(requirement => {
-        if (complementedItem[requirement] === undefined) {
-            switch (requirement) {
-                case 'name': 
-                case 'description': 
-                case 'activityid': 
-                    complementedItem[requirement] = ''
-                    break
-                case 'state': 
-                    complementedItem[requirement] = 'tothink'
-                    break
-                case 'dueDate': 
-                case 'recurring': 
-                case 'recurrence': 
-                    complementedItem[requirement] = null
-                    break
+    if (requirements !== undefined) {
+        requirements.forEach(requirement => {
+            if (complementedItem[requirement] === undefined) {
+                switch (requirement) {
+                    case 'name': 
+                    case 'description': 
+                    case 'activityid': 
+                        complementedItem[requirement] = ''
+                        break
+                    case 'dueDate': 
+                    case 'recurrence': 
+                        complementedItem[requirement] = null
+                        break
+                    case 'isActive':
+                        complementedItem[requirement] = true
+                        break
+                    case 'isRecurring': 
+                        complementedItem[requirement] = false
+                        break
+                }
             }
-        }
-    })
+        })  
+    }
     // Cleanup
     delete complementedItem.activity
     // Return

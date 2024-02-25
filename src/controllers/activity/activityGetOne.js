@@ -1,6 +1,11 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const activityContract = require("./activity.contracts.json")
+const { 
+  getActivityContractForActivity, 
+  getActivityContractForToThink, 
+  complementRequirments 
+} = require("./activity.services.js")
 
 module.exports = activityGetOne = (req, res, next) => {
   /*
@@ -30,7 +35,7 @@ module.exports = activityGetOne = (req, res, next) => {
         as: "tothinks",
         pipeline: [
           {
-            $project: activityContract.tothinks,
+            $project: getActivityContractForToThink(),
           },
           {
             $sort: { order: -1 }
@@ -39,15 +44,22 @@ module.exports = activityGetOne = (req, res, next) => {
       },
     },
     {
-      $project: activityContract.activity,
+      $project: getActivityContractForActivity(),
     },
   ]).then((activity) => {
       if (activity !== undefined) {
         console.log("activity.getone.success");
+
+        // Meet requirements
+        let requiredActivity = complementRequirments(req.body.requirements, activity[0])
+
+        // Filter
+        let filteredActivity = filterActivity({...requiredActivity})
+
         return res.status(200).json({
           type: "activity.getone.success",
           data: {
-            activity: activity[0],
+            activity: filteredActivity,
           },
         });
       } else {

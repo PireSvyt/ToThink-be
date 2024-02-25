@@ -1,7 +1,10 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
-const complementRequirments = require("./activity.services.js")
+const { 
+  getActivityContractForActivity, 
+  getActivityContractForToThink, 
+  complementRequirments 
+} = require("./activity.services.js")
 
 module.exports = activityGetMany = (req, res, next) => {
   /*
@@ -40,47 +43,37 @@ module.exports = activityGetMany = (req, res, next) => {
         as: "tothinks",
         pipeline: [
           {
-            $project: activityContract.tothinks,
+            $project: getActivityContractForToThink(),
           },
         ],
       },
     },
     {
-      $project: activityContract.activity,
+      $project: getActivityContractForActivity(),
     },
   ])
     .sort({order: -1})
     .then((activities) => {
       if (activities !== undefined) {
         console.log("activity.getmany.success");
+
+        // Meet requirements
         let requiredActivities = {}
         activities.forEach(activity => {
-          //console.log("foreach", activity)
-
-          // Filter
-          let filteredActivity = {}
-          Object.keys(activity).forEach(key => {
-            if (activityContract.activity[key] === 1) {
-              filteredActivity[key] = activity[key]
-            }
-          })
-
-          // Meet requirements
-          let requiredActivity = {}
-          if (req.body.requirements !== undefined) {
-            requiredActivity = complementRequirments(req.body.requirements, filteredActivity)
-            //console.log("requiredActivity", requiredActivity)
-            requiredActivities[activity.activityid] = {...requiredActivity}
-          } else {
-            requiredActivities[activity.activityid] = {...filteredActivity}
-          }
-          
+          requiredActivities[activity.activityid] = complementRequirments(req.body.requirements, activity)         
         })
+
+        // Filter
+        let filteredActivities = {}
+        activities.forEach(activity => {
+          filteredActivities[activity.activityid] = filterActivity({...requiredActivities[activity.activityid]})
+        })
+        
         // Response
         return res.status(200).json({
           type: "activity.getmany.success",
           data: {
-            activities: requiredActivities,
+            activities: filteredActivities,
           },
         });
       } else {

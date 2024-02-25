@@ -1,6 +1,10 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
+const { 
+  getActivityContractForMine, 
+  getActivityContractForToThink, 
+  complementRequirments 
+} = require("./activity.services.js")
 
 module.exports = activityGetMine = (req, res, next) => {
   /*
@@ -30,39 +34,36 @@ module.exports = activityGetMine = (req, res, next) => {
         as: "tothinks",
         pipeline: [
           {
-            $project: activityContract.tothinks,
+            $project: getActivityContractForToThink(),
           },
         ],
       },
     },
     {
-      $project: activityContract.mine,
+      $project: getActivityContractForMine(),
     },
   ])
     .sort({order: -1})
     .then((activities) => {
       if (activities !== undefined) {
         console.log("activity.getmine.success");
-        /*// Reset order
-        let orders = activities.map(a => {return a.order})
-        let min = Math.min(orders)
-        let max = Math.max(orders)
-        let c = 1
-        let K = 100
-        let activitiesReordered = activities.map(a => {
-          let act = {...a}
-          if (max !== min) {
-            act.order = (a.order - min) / (max - min) * K + 1
-          } else {
-            act.order = (c / orders.length) * K + 1
-            c += 1
-          }
-          return act
-        })*/
+
+        // Meet requirements
+        let requiredActivities = {}
+        activities.forEach(activity => {
+          requiredActivities[activity.activityid] = complementRequirments(req.body.requirements, activity)         
+        })
+
+        // Filter
+        let filteredActivities = {}
+        activities.forEach(activity => {
+          filteredActivities[activity.activityid] = filterActivity({...requiredActivities[activity.activityid]})
+        })
+        
         return res.status(200).json({
           type: "activity.getmine.success",
           data: {
-            activities: activities,
+            activities: filteredActivities,
           },
         });
       } else {

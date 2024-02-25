@@ -1,7 +1,7 @@
 require("dotenv").config();
-const User = require("../../models/User.js");
 const ToThink = require("../../models/ToThink.js");
 const Activity = require("../../models/Activity.js");
+const Setting = require("../../models/Setting.js");
 
 module.exports = authAuthenticateOwner = (req, res, next) => {
   /*
@@ -45,11 +45,22 @@ module.exports = authAuthenticateOwner = (req, res, next) => {
         match['activityid'] = {
           $in: [ req.body.activityid ],
         };
-      } else {        
-        console.log("auth.authenticateowner.error.collectionmistmatch");
-        return res.status(404).json({
-          type: "auth.authenticateowner.error.collectionmistmatch"
-        });
+      } else {  
+        if (req.body.settingid !== undefined) {
+          collection = Setting;
+          item = "setting"
+          match['owner'] = {
+            $in: [ req.augmented.user.userid ],
+          };
+          match['settingid'] = {
+            $in: [ req.body.settingid ],
+          };
+        } else {  
+          console.log("auth.authenticateowner.error.collectionmistmatch");
+          return res.status(404).json({
+            type: "auth.authenticateowner.error.collectionmistmatch"
+          });
+        }
       }
     }
 

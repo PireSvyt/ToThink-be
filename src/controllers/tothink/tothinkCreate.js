@@ -1,9 +1,11 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const ToThink = require("../../models/ToThink.js");
-const tothinkContract = require("./tothink.contracts.json")
 const changeCreate = require("../change/changeCreate.js")
-const complementRequirments = require("./tothink.services.js")
+const {
+  checkCreateInputs, 
+  complementRequirments, 
+  filterToThink} = require("./tothink.services.js")
 
 module.exports = tothinkCreate = (req, res, next) => {
   /*
@@ -12,6 +14,7 @@ module.exports = tothinkCreate = (req, res, next) => {
   
   possible response types
   * tothink.create.success
+  * tothink.create.error.inputs
   * tothink.create.error.oncreate
   * tothink.create.error.idprovided
   
@@ -21,13 +24,20 @@ module.exports = tothinkCreate = (req, res, next) => {
     console.log("tothink.create");
   }
 
-  // Save
   let tothinkToSave = { ...req.body.tothink }
+
+  // Checks
+  let errors = checkCreateInputs(tothinkToSave)
+  if (errors.length > 0) {    
+    return res.status(403).json({
+      type: "tothink.create.error.inputs",
+      errors: errors
+    });
+  }
+
+  // Auto fields
   tothinkToSave.tothinkid = random_string()
   tothinkToSave.owner = req.augmented.user.userid
-  if (tothinkToSave.state === undefined) {
-    tothinkToSave.state = null
-  }
   tothinkToSave = new ToThink( tothinkToSave );
   tothinkToSave.tothinkid = tothinkToSave._id
 
@@ -37,35 +47,24 @@ module.exports = tothinkCreate = (req, res, next) => {
     .then(() => {
       console.log("tothink.create.success");
 
-      // Filtering
-      let filteredToThink = {}
-      Object.keys(tothinkToSave._doc).forEach(key => {
-        if (tothinkContract.activity[key] === 1) {
-          filteredToThink[key] = tothinkToSave._doc[key]
-        }
-      })
+      // Meet requirements
+      let requiredToThink = complementRequirments(req.body.requirements, {...tothinkToSave._doc})
 
       // Change track
       changeCreate(req, {
         itemid: tothinkToSave.tothinkid, 
         command: 'create',
-        changes: {...filteredToThink}
+        changes: {...requiredToThink}
       })
 
-      // Meet requirements
-      let requiredToThink = {}
-      if (req.body.requirements !== undefined) {
-        requiredToThink = complementRequirments(req.body.requirements, filteredToThink)
-        //console.log("requiredToThink", requiredToThink)
-      } else {
-        requiredToThink = filteredToThink
-      }
+      // Filtering
+      let filteredToThink = filterToThink({...requiredToThink})
 
       // Response
       return res.status(201).json({
         type: "tothink.create.success",
         data: {
-          tothink: requiredToThink,
+          tothink: filteredToThink,
           dependencies: {
             activityids: [filteredToThink.activityid]
           }

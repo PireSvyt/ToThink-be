@@ -1,5 +1,10 @@
 require("dotenv").config();
 const Setting = require("../../models/Setting.js");
+const changeCreate = require("../change/changeCreate.js")
+const { 
+  complementRequirments,
+  filterSetting
+} = require("./setting.services.js")
 
 module.exports = settingUpdate = (req, res, next) => {
   /*
@@ -17,16 +22,44 @@ module.exports = settingUpdate = (req, res, next) => {
     console.log("setting.update");
   }
   
-  let settingToSave = { ...req.body };
+  let settingToSave = { ...req.augmented.setting };
 
-  // Save
-  Setting.updateOne({ key: settingToSave.key }, settingToSave)
-    .then(() => {
+  // Checks
+  
+
+  // Update
+  const settingUpdate = {};
+  for (const key of Object.keys(req.body)){
+    settingUpdate[key] = req.body[key];
+  }
+  Setting.findOneAndUpdate(
+    { settingid: req.body.settingid }, 
+    { $set: settingUpdate }, 
+    { new: true })
+    .then(newSettingState => {
       console.log("setting.update.success.modified");
+      //console.log("from:", settingUpdate);
+      //console.log("to  :", newSettingState);  
+      
+      // Meet requirements
+      let requiredSetting = complementRequirments(req.body.requirements, {...newSettingState})
+
+      // Filtering
+      let filteredSetting = filterSetting({...requiredSetting})
+
+      // No change track
+
+      // Outcome
+      let updatedSetting = {}
+      for (const key of Object.keys(req.body)){
+        updatedSetting[key] = filteredSetting[key];
+      }
+
+      // Response
       return res.status(200).json({
         type: "setting.update.success.modified",
         data: {
-          setting: settingToSave.value,
+          setting: updatedSetting,
         },
       });
     })

@@ -1,6 +1,7 @@
 require("dotenv").config();
 const random_string = require("../../resources/random_string.js");
 const Change = require("../../models/Change.js");
+const { checkCreateInputs } = require("./change.services.js")
 
 module.exports = changeCreate = async (req, change) => {
 
@@ -8,7 +9,6 @@ module.exports = changeCreate = async (req, change) => {
     console.log("change.create");
   }
 
-  // Save
   let changeToSave = { ...change }
   /*
   {
@@ -16,7 +16,17 @@ module.exports = changeCreate = async (req, change) => {
     command: { type: String },
     changes: { type: Object}
   }
-    */
+  */
+  // Checks
+  let errors = checkCreateInputs(activityToSave)
+  if (errors.length > 0) {    
+    return res.status(403).json({
+      type: "change.create.error.inputs",
+      errors: errors
+    });
+  }
+
+  // Auto fields
   changeToSave.changeid = random_string()
   changeToSave.author = req.augmented.user.userid
   changeToSave.date = new Date()

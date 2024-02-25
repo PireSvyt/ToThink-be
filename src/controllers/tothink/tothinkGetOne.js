@@ -1,6 +1,11 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
-const tothinkContract = require("./tothink.contracts.json")
+const { 
+  getTothinkContractForToThink, 
+  getTothinkContractForActivity, 
+  filterToThink, 
+  complementRequirments 
+} = require("./tothink.services.js")
 
 module.exports = tothinkGetOne = (req, res, next) => {
   /*
@@ -30,21 +35,28 @@ module.exports = tothinkGetOne = (req, res, next) => {
         as: "activity",
         pipeline: [
           {
-            $project: tothinkContract.activity,
+            $project: getTothinkContractForActivity(),
           },
         ],
       },
     },
     {
-      $project: tothinkContract.tothink,
+      $project: getTothinkContractForToThink(),
     },
   ]).then((tothink) => {
       if (tothink !== undefined) {
         console.log("tothink.getone.success");
+
+        // Meet requirements
+        let requiredToThink = complementRequirments(req.body.requirements, tothink)
+
+        // Filter
+        let filteredToThink = filterToThink(requiredToThink)
+
         return res.status(200).json({
           type: "tothink.getone.success",
           data: {
-            tothink: tothink,
+            tothink: filteredToThink,
           },
         });
       } else {

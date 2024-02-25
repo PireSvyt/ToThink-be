@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const changeCreate = require("../change/changeCreate.js")
-const complementRequirments = require("./activity.services.js")
+const { complementRequirments, filterActivity } = require("./activity.services.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*
@@ -37,34 +37,31 @@ module.exports = activityUpdate = (req, res, next) => {
       console.log("activity.update.success.modified");
       //console.log("from:", activityUpdate);
       //console.log("to  :", newActivityState);
+
+      // Meet requirements
+      let requiredActivity = complementRequirments(req.body.requirements, newActivityState)
+
+      // Change track
+      changeCreate(req, {
+        itemid: activityToSave.activityid, 
+        command: 'create',
+        changes: {...requiredActivity}
+      })
+
+      // Filter
+      let filteredActivity = filterActivity({...requiredActivity})
       
       // Outcome
       let updatedActivity = {}
       for (const key of Object.keys(req.body)){
-        updatedActivity[key] = newActivityState[key];
-      }
-
-      // Change track
-      changeCreate(req, {
-        itemid: updatedActivity.activityid, 
-        command: 'update',
-        changes: {...updatedActivity}
-      })
-
-      // Meet requirements
-      let requiredActivity = {}
-      if (req.body.requirements !== undefined) {
-        requiredActivity = complementRequirments(req.body.requirements, updatedActivity)
-        //console.log("requiredActivity", requiredActivity)
-      } else {
-        requiredActivity = updatedActivity
+        updatedActivity[key] = filteredActivity[key];
       }
 
       // Response
       return res.status(200).json({
         type: "activity.update.success.modified",
         data:{
-          update: requiredActivity,
+          update: updatedActivity,
         }
       });
     })

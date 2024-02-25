@@ -1,7 +1,10 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
 const changeCreate = require("../change/changeCreate.js")
-const complementRequirments = require("./tothink.services.js")
+const { 
+  complementRequirments,
+  filterToThink
+} = require("./tothink.services.js")
 
 module.exports = tothinkUpdate = (req, res, next) => {
   /*
@@ -22,8 +25,7 @@ module.exports = tothinkUpdate = (req, res, next) => {
 
   let tothinkToSave = { ...req.augmented.tothink };
 
-  // Checks
-  
+  // Checks  
 
   // Update
   const tothinkUpdate = {};
@@ -38,45 +40,48 @@ module.exports = tothinkUpdate = (req, res, next) => {
       console.log("tothink.update.success.modified");
       //console.log("from:", tothinkUpdate);
       //console.log("to  :", newToThinkState);
-      
-      // Outcome
-      let updatedToThink = {}
-      for (const key of Object.keys(req.body)){
-        updatedToThink[key] = newToThinkState[key];
-      }
 
       // Impacted activities
       let activityids = []
-      if (req.augmented.tothink.activityid !== updatedToThink.activityid) {
-        if (updatedToThink.activityid !== undefined && updatedToThink.activityid !== "") {
-          activityids.push(updatedToThink.activityid)
+      if (req.augmented.tothink.activityid !== newToThinkState.activityid) {
+        if (newToThinkState.activityid !== undefined && newToThinkState.activityid !== "") {
+          activityids.push({
+            command: "add",
+            activityid: newToThinkState.activityid
+          })
         }
         if (req.augmented.tothink.activityid !== undefined && req.augmented.tothink.activityid !== "") {
-          activityids.push(req.augmented.tothink.activityid)
+          activityids.push({
+            command: "remove",
+            activityid: req.augmented.tothink.activityid
+          })
         }
       }      
+      
+      // Meet requirements
+      let requiredToThink = complementRequirments(req.body.requirements, {...newToThinkState})
 
       // Change track
       changeCreate(req, {
-        itemid: tothinkUpdate.tothinkid, 
-        command: 'update',
-        changes: {...tothinkUpdate}
+        itemid: tothinkToSave.tothinkid, 
+        command: 'create',
+        changes: {...requiredToThink}
       })
 
-      // Meet requirements
-      let requiredToThink = {}
-      if (req.body.requirements !== undefined) {
-        requiredToThink = complementRequirments(req.body.requirements, updatedToThink)
-        //console.log("requiredToThink", requiredToThink)
-      } else {
-        requiredToThink = updatedToThink
+      // Filtering
+      let filteredToThink = filterToThink({...requiredToThink})
+
+      // Outcome
+      let updatedToThink = {}
+      for (const key of Object.keys(req.body)){
+        updatedToThink[key] = filteredToThink[key];
       }
 
       // Response
       return res.status(200).json({
         type: "tothink.update.success.modified",
         data:{
-          update: requiredToThink,
+          update: updatedToThink,
           dependencies: {
             activityids: activityids
           }

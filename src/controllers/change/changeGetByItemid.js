@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Change = require("../../models/Change.js");
-const changeContract = require("./change.contracts.json")
+const { getChangeContractForChange } = require("./change.services.js")
 
 module.exports = changeGetByItemid = async (itemid) => {
 
@@ -16,15 +16,28 @@ module.exports = changeGetByItemid = async (itemid) => {
         $match: match,
       },
       {
-        $project: changeContract.change,
+        $project: getChangeContractForChange(),
       },
     ])
     .then((changes) => {
       if (changes !== undefined) {
         console.log("change.getbyitemid.success");
+
+        // Meet requirements
+        let requiredChanges = {}
+        changes.forEach(change => {
+          requiredChanges[change.changeid] = complementRequirments(req.body.requirements, change)         
+        })
+
+        // Filter
+        let filteredChanges = {}
+        changes.forEach(change => {
+          filteredChanges[change.changeid] = filterActivity({...requiredChanges[change.changeid]})
+        })
+
         return {
           type: "change.getbyitemid.success",
-          changes: changes
+          changes: filteredChanges
         }
       }
     })
