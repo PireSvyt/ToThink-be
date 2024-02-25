@@ -1,6 +1,5 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const activityContract = require("./activity.contracts.json")
 const { 
   getActivityContractForActivity, 
   getActivityContractForToThink, 
