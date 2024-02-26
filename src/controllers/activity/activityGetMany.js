@@ -3,7 +3,8 @@ const Activity = require("../../models/Activity.js");
 const { 
   getActivityContractForActivity, 
   getActivityContractForToThink, 
-  complementRequirments 
+  complementRequirments,
+  filterActivity
 } = require("./activity.services.js")
 
 module.exports = activityGetMany = (req, res, next) => {
@@ -68,7 +69,7 @@ module.exports = activityGetMany = (req, res, next) => {
         activities.forEach(activity => {
           filteredActivities[activity.activityid] = filterActivity({...requiredActivities[activity.activityid]})
         })
-        
+
         // Response
         return res.status(200).json({
           type: "activity.getmany.success",

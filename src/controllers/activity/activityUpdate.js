@@ -1,7 +1,10 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const changeCreate = require("../change/changeCreate.js")
-const { complementRequirments, filterActivity } = require("./activity.services.js")
+const { 
+  complementRequirments, 
+  filterActivity 
+} = require("./activity.services.js")
 
 module.exports = activityUpdate = (req, res, next) => {
   /*

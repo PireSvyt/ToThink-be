@@ -3,7 +3,8 @@ const Activity = require("../../models/Activity.js");
 const { 
   getActivityContractForActivity, 
   getActivityContractForToThink, 
-  complementRequirments 
+  complementRequirments,
+  filterActivity 
 } = require("./activity.services.js")
 
 module.exports = activityGetOne = (req, res, next) => {
