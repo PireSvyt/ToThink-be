@@ -1,5 +1,6 @@
 
-let states = [
+// Resources
+let todoStateSelectableValues = [
     { 
         "value": "todo",
         "nextable": ['wip', 'blocked', 'done', 'discarded'],
@@ -26,10 +27,8 @@ let states = [
     }
 ]
 
-function getTodoStates () {
-    return states
-}
 
-module.exports = { 
-    getTodoStates,
+module.exports = {
+    // Resources
+    todoStateSelectableValues,
 };

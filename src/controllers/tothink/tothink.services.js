@@ -1,5 +1,5 @@
-
-let tothinkContract = {
+// Contracts
+let tothinkContractForToThink = {
     "_id": 0,
     "tothinkid": 1,
     "activityid": 1,
@@ -11,87 +11,27 @@ let tothinkContract = {
     "reminders": 1,
     "todos": 1,
 }
-let activityContract = {
+let tothinkContractForActivity = {
     "_id": 0,
     "activityid": 1,
     "name": 1,
 }
-let states = [
-    { 
-        "value": "tothink",
-        "if": (item) => {
-            if (item.reminders !== undefined) {
-             if (item.reminders.length === 0) {
-                return true
-             }
-             // OR
-             if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length > 0) {
-                return true
-             }
-            }
-            return false
-        }
-    },
-    { 
-        "value": "planned",
-        "if": (item) => {
-            if (item.reminders !== undefined) {
-             if (item.reminders.filter(reminder => {reminder.state === 'active'}).length > 0) {
-                if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length === 0) {
-                    return true
-                }
-             }
-            }
-            return false
-        },
-    },
-    { 
-        "value": "over",
-        "if": (item) => {
-            if (item.reminders !== undefined) {
-                if (item.reminders.filter(reminder => {reminder.state === 'wip'}).length === 0) {
-                    if (item.reminders.filter(reminder => {reminder.state === 'inactive'}).length > 0) {
-                        return true
-                    }
-                    // OR
-                    if (item.reminders.filter(reminder => {reminder.state === 'over'}).length === 0) {
-                        return true
-                    }
-                    return false
-                }
-             
-            }
-            return false
-        },
-    }
-]
 
+// Functions
 function checkCreateInputs (tothink) {
     let errors = []
     if (tothink.activityid === "") {
-    errors.push("missing activityid")
+        errors.push("missing activityid")
     }
     /*if (tothinkToSave.order === 0 || tothinkToSave.order === undefined || tothinkToSave.order === null) {
     errors.push("invalid order")
     }*/
     return errors
 }
-function getTothinkContractForToThink () {
-    return tothinkContract
-}
-function getTothinkContractForActivity () {
-    return activityContract
-}
-function getStateList () {
-    return states.map(state => state.value)
-}
-function getToThinkStates () {
-    return states
-}
 function filterToThink (tothink) {
     let filteredToThink = {}
     Object.keys(tothink).forEach(key => {
-      if (activityContract[key] === 1) {
+      if (tothinkContractForToThink[key] === 1) {
         filteredToThink[key] = tothink[key]
       }
     })
@@ -128,12 +68,12 @@ function complementRequirments (requirements, item) {
     return complementedItem
 }
 
-module.exports = { 
+module.exports = {
+    // Contracts
+    tothinkContractForToThink,
+    tothinkContractForActivity,
+    // Functions
     checkCreateInputs,
-    getTothinkContractForToThink,
-    getTothinkContractForActivity,
-    getStateList,
-    getToThinkStates,
     filterToThink,
     complementRequirments
 };

@@ -1,7 +1,5 @@
 require("dotenv").config();
-const { getToThinkStates } = require("../tothink/tothink.services.js")
-const { getReminderStates } = require("../reminder/reminder.services.js")
-const { getTodoStates } = require("../todo/todo.services.js")
+const { todoStateSelectableValues } = require("../todo/todo.services.js")
 
 module.exports = settingGetDefaults = (req, res, next) => {
   /*
@@ -17,28 +15,14 @@ module.exports = settingGetDefaults = (req, res, next) => {
     console.log("setting.getdefaults");
   }
 
-  // Tothink states
-  let tothinkStates = [...getToThinkStates()]
-  tothinkStates.forEach(tothinkState => {
-    tothinkState.if = tothinkState.if.toString()
-  });
-
-  // Tothink states
-  let reminderStates = [...getReminderStates()]
-  reminderStates.forEach(reminderState => {
-    reminderState.if = reminderState.if.toString()
-  });
-
   // Todo states
-  let todoStates = [...getTodoStates()]
+  let todoStates = todoStateSelectableValues
 
   return res.status(200).json({
     type: "setting.getdefaults.success",
     data: {
       defaults: {
         states: {
-          tothink: tothinkStates,
-          reminder: reminderStates,
           todo: todoStates
         }
       }

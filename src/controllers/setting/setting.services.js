@@ -1,42 +1,42 @@
-
-let settingContract = {
-    "_id": 0,
-    "settingid": 1,
-    "audience": 0,
-    "key": 1,
-    "value": 1
-  }
-
-function checkCreateInputs (setting) {
-    /*
-    {
-      i?
-    }
-    */
-    let errors = []
-    return errors
+// Contracts
+let settingContractForSetting = {
+  "_id": 0,
+  "settingid": 1,
+  "audience": 0,
+  "key": 1,
+  "value": 1
 }
-function getSettingContractForSetting () {
-    return settingContract
+
+// Functions
+function checkCreateInputs (setting) {
+  /*
+  {
+    i?
+  }
+  */
+  let errors = []
+  return errors
 }
 function filterSetting (setting) {
-    let filteredSetting = {}
-    Object.keys(setting).forEach(key => {
-      if (settingContract[key] === 1) {
-        filteredSetting[key] = settingContract[key]
-      }
-    })
-    return filteredSetting
+  let filteredSetting = {}
+  Object.keys(setting).forEach(key => {
+    if (settingContractForSetting[key] === 1) {
+      filteredSetting[key] = setting[key]
+    }
+  })
+  return filteredSetting
 }
 function complementRequirments (requirements, item) {
-    let complementedItem = {...item}
-    // Return
-    return complementedItem
+  let complementedItem = {...item}
+  // Return
+  return complementedItem
 }
 
-module.exports = { 
-    checkCreateInputs,
-    getSettingContractForSetting,
-    filterSetting,
-    complementRequirments
+module.exports = {
+  // Contracts
+  settingContractForSetting,
+  // Functions
+  checkCreateInputs,
+  filterSetting,
+  complementRequirments
 };

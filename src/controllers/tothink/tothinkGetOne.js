@@ -1,8 +1,8 @@
 require("dotenv").config();
 const ToThink = require("../../models/ToThink.js");
 const { 
-  getTothinkContractForToThink, 
-  getTothinkContractForActivity, 
+  tothinkContractForActivity,
+  tothinkContractForToThink, 
   filterToThink, 
   complementRequirments 
 } = require("./tothink.services.js")
@@ -35,13 +35,13 @@ module.exports = tothinkGetOne = (req, res, next) => {
         as: "activity",
         pipeline: [
           {
-            $project: getTothinkContractForActivity(),
+            $project: tothinkContractForActivity,
           },
         ],
       },
     },
     {
-      $project: getTothinkContractForToThink(),
+      $project: tothinkContractForToThink
     },
   ]).then((tothink) => {
       if (tothink !== undefined) {

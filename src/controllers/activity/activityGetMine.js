@@ -1,10 +1,11 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
 const {  
+  activityContractForMine,
+  activityContractForToThink,
   complementRequirments,
   filterActivity
 } = require("./activity.services.js")
-const activityResource = require("./activity.resource.json")
 
 module.exports = activityGetMine = (req, res, next) => {
   /*
@@ -34,13 +35,13 @@ module.exports = activityGetMine = (req, res, next) => {
         as: "tothinks",
         pipeline: [
           {
-            $project: activityResource.contracts.tothink,
+            $project: activityContractForToThink,
           },
         ],
       },
     },
     {
-      $project: activityResource.contracts.activity,
+      $project: activityContractForMine,
     },
   ])
     .sort({order: -1})

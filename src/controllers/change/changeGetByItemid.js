@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Change = require("../../models/Change.js");
-const { getChangeContractForChange } = require("./change.services.js")
+const { changeContractForChange } = require("./change.services.js")
 
 module.exports = changeGetByItemid = async (itemid) => {
 
@@ -16,7 +16,7 @@ module.exports = changeGetByItemid = async (itemid) => {
         $match: match,
       },
       {
-        $project: getChangeContractForChange(),
+        $project: changeContractForChange,
       },
     ])
     .then((changes) => {

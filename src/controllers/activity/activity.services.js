@@ -1,5 +1,27 @@
-const activityResource = require("./activity.resource.json")
 
+// Contracts
+let activityContractForMine = {
+    "_id": 0,
+    "activityid": 1,
+    "name": 1,
+    "order": 1
+}
+let activityContractForActivity = {
+    "_id": 0,
+    "activityid": 1,
+    "name": 1,
+    "description": 1,
+    "tothinks": 1,
+    "order": 1
+}
+let activityContractForToThink = {
+    "_id": 0,
+    "tothinkid": 1,
+    "name": 1,
+    "order": 1
+}
+
+// Functions
 function checkCreateInputs (activity) {
     /*
     {
@@ -16,15 +38,6 @@ function checkCreateInputs (activity) {
       errors.push("invalid order")
     }
     return errors
-}
-function getActivityContractForMine () {
-    return activityResource.contracts.mine
-}
-function getActivityContractForActivity () {
-    return activityResource.contracts.activity
-}
-function getActivityContractForToThink () {
-    return activityResource.contracts.tothink
 }
 function filterActivity (activity) {
     let filteredActivity = {}
@@ -58,11 +71,13 @@ function complementRequirments (requirements, item) {
     return complementedItem
 }
 
-module.exports = { 
+module.exports = {
+    // Contracts
+    activityContractForMine,
+    activityContractForActivity,
+    activityContractForToThink,
+    // Functions
     checkCreateInputs,
-    getActivityContractForMine,
-    getActivityContractForActivity,
-    getActivityContractForToThink,
     filterActivity,
     complementRequirments
 };

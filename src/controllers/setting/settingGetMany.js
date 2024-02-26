@@ -1,7 +1,7 @@
 require("dotenv").config();
 const Setting = require("../../models/Setting.js");
 const { 
-  getSettingContractForSetting, 
+  settingContractForSetting, 
   filterSetting, 
   complementRequirments 
 } = require("./setting.services.js")
@@ -36,7 +36,7 @@ module.exports = settingGetMany = (req, res, next) => {
       $match: match,
     },
     {
-      $project: getSettingContractForSetting(),
+      $project: settingContractForSetting,
     },
   ]).then((settings) => {
       if (settings !== undefined) {
