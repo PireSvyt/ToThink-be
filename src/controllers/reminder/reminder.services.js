@@ -56,6 +56,10 @@ function isItemValid (item) {
     return true
 }
 
-module.exports = function getReminderStates () {
+function getReminderStates () {
     return states
 }
+
+module.exports = { 
+    getReminderStates,
+};

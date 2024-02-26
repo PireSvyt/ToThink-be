@@ -66,7 +66,7 @@ let states = [
     }
 ]
 
-module.exports = function checkCreateInputs (tothink) {
+function checkCreateInputs (tothink) {
     let errors = []
     if (tothink.activityid === "") {
     errors.push("missing activityid")
@@ -76,19 +76,19 @@ module.exports = function checkCreateInputs (tothink) {
     }*/
     return errors
 }
-module.exports = function getTothinkContractForToThink () {
+function getTothinkContractForToThink () {
     return tothinkContract
 }
-module.exports = function getTothinkContractForActivity () {
+function getTothinkContractForActivity () {
     return activityContract
 }
-module.exports = function getStateList () {
+function getStateList () {
     return states.map(state => state.value)
 }
-module.exports = function getToThinkStates () {
+function getToThinkStates () {
     return states
 }
-module.exports = function filterToThink (tothink) {
+function filterToThink (tothink) {
     let filteredToThink = {}
     Object.keys(tothink).forEach(key => {
       if (activityContract[key] === 1) {
@@ -97,7 +97,7 @@ module.exports = function filterToThink (tothink) {
     })
     return filteredToThink
 }
-module.exports = function complementRequirments (requirements, item) {
+function complementRequirments (requirements, item) {
     let complementedItem = {...item}
     if (requirements !== undefined) {
         requirements.forEach(requirement => {
@@ -127,3 +127,13 @@ module.exports = function complementRequirments (requirements, item) {
     // Return
     return complementedItem
 }
+
+module.exports = { 
+    checkCreateInputs,
+    getTothinkContractForToThink,
+    getTothinkContractForActivity,
+    getStateList,
+    getToThinkStates,
+    filterToThink,
+    complementRequirments
+};

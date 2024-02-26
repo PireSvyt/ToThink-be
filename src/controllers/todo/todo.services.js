@@ -26,6 +26,10 @@ let states = [
     }
 ]
 
-module.exports = function getTodoStates () {
+function getTodoStates () {
     return states
 }
+
+module.exports = { 
+    getTodoStates,
+};

@@ -7,7 +7,7 @@ let settingContract = {
     "value": 1
   }
 
-module.exports = function checkCreateInputs (setting) {
+function checkCreateInputs (setting) {
     /*
     {
       i?
@@ -16,10 +16,10 @@ module.exports = function checkCreateInputs (setting) {
     let errors = []
     return errors
 }
-module.exports = function getSettingContractForSetting () {
+function getSettingContractForSetting () {
     return settingContract
 }
-module.exports = function filterSetting (setting) {
+function filterSetting (setting) {
     let filteredSetting = {}
     Object.keys(setting).forEach(key => {
       if (settingContract[key] === 1) {
@@ -28,8 +28,15 @@ module.exports = function filterSetting (setting) {
     })
     return filteredSetting
 }
-module.exports = function complementRequirments (requirements, item) {
+function complementRequirments (requirements, item) {
     let complementedItem = {...item}
     // Return
     return complementedItem
 }
+
+module.exports = { 
+    checkCreateInputs,
+    getSettingContractForSetting,
+    filterSetting,
+    complementRequirments
+};

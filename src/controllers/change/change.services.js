@@ -8,7 +8,7 @@ let changeContract = {
     "changes": 1
   }
 
-module.exports = function checkCreateInputs (change) {
+function checkCreateInputs (change) {
     /*
     {
       itemid: { type: String }, 
@@ -19,10 +19,10 @@ module.exports = function checkCreateInputs (change) {
     let errors = []
     return errors
 }
-module.exports = function getChangeContractForChange () {
+function getChangeContractForChange () {
     return changeContract
 }
-module.exports = function filterChange (change) {
+function filterChange (change) {
     let filteredChange = {}
     Object.keys(change).forEach(key => {
       if (changeContract[key] === 1) {
@@ -31,8 +31,15 @@ module.exports = function filterChange (change) {
     })
     return filteredChange
 }
-module.exports = function complementRequirments (requirements, item) {
+function complementRequirments (requirements, item) {
     let complementedItem = {...item}
     // Return
     return complementedItem
 }
+
+module.exports = { 
+    checkCreateInputs,
+    getChangeContractForChange,
+    filterChange,
+    complementRequirments
+};
