@@ -1,6 +1,6 @@
 const activityResource = require("./activity.resource.json")
 
-module.exports = function checkCreateInputs (activity) {
+function checkCreateInputs (activity) {
     /*
     {
       activityid: { type: String, required: true, unique: true },
@@ -17,16 +17,16 @@ module.exports = function checkCreateInputs (activity) {
     }
     return errors
 }
-module.exports = function getActivityContractForMine () {
+function getActivityContractForMine () {
     return activityResource.contracts.mine
 }
-module.exports = function getActivityContractForActivity () {
+function getActivityContractForActivity () {
     return activityResource.contracts.activity
 }
-module.exports = function getActivityContractForToThink () {
+function getActivityContractForToThink () {
     return activityResource.contracts.tothink
 }
-module.exports = function filterActivity (activity) {
+function filterActivity (activity) {
     let filteredActivity = {}
     Object.keys(activity).forEach(key => {
       if (activityResource.contracts.activity[key] === 1) {
@@ -35,7 +35,7 @@ module.exports = function filterActivity (activity) {
     })
     return filteredActivity
 }
-module.exports = function complementRequirments (requirements, item) {
+function complementRequirments (requirements, item) {
     let complementedItem = {...item}
     if (requirements !== undefined) {
         requirements.forEach(requirement => {
@@ -57,3 +57,12 @@ module.exports = function complementRequirments (requirements, item) {
     // Return
     return complementedItem
 }
+
+module.exports = { 
+    checkCreateInputs,
+    getActivityContractForMine,
+    getActivityContractForActivity,
+    getActivityContractForToThink,
+    filterActivity,
+    complementRequirments
+};
