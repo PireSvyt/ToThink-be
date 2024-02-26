@@ -35,11 +35,13 @@ module.exports = settingGetDefaults = (req, res, next) => {
   return res.status(200).json({
     type: "setting.getdefaults.success",
     data: {
+      defaults: {
         states: {
-            tothink: tothinkStates,
-            reminder: reminderStates,
-            todo: todoStates
+          tothink: tothinkStates,
+          reminder: reminderStates,
+          todo: todoStates
         }
+      }
     },
   });
 };
