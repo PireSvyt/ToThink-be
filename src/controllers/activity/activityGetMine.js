@@ -1,10 +1,10 @@
 require("dotenv").config();
 const Activity = require("../../models/Activity.js");
-const { 
-  getActivityContractForMine, 
-  getActivityContractForToThink, 
-  complementRequirments 
+const {  
+  complementRequirments,
+  filterActivity
 } = require("./activity.services.js")
+const activityResource = require("./activity.resource.json")
 
 module.exports = activityGetMine = (req, res, next) => {
   /*
@@ -34,13 +34,13 @@ module.exports = activityGetMine = (req, res, next) => {
         as: "tothinks",
         pipeline: [
           {
-            $project: getActivityContractForToThink(),
+            $project: activityResource.contracts.tothink,
           },
         ],
       },
     },
     {
-      $project: getActivityContractForMine(),
+      $project: activityResource.contracts.activity,
     },
   ])
     .sort({order: -1})
@@ -59,7 +59,7 @@ module.exports = activityGetMine = (req, res, next) => {
         activities.forEach(activity => {
           filteredActivities[activity.activityid] = filterActivity({...requiredActivities[activity.activityid]})
         })
-        
+
         return res.status(200).json({
           type: "activity.getmine.success",
           data: {

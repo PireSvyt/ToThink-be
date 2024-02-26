@@ -1,0 +1,24 @@
+{
+    "contracts": {
+        "mine": {
+            "_id": 0,
+            "activityid": 1,
+            "name": 1,
+            "order": 1
+        },
+        "activity": {
+            "_id": 0,
+            "activityid": 1,
+            "name": 1,
+            "description": 1,
+            "tothinks": 1,
+            "order": 1
+        },
+        "tothink": {
+            "_id": 0,
+            "tothinkid": 1,
+            "name": 1,
+            "order": 1
+        }
+    }
+}

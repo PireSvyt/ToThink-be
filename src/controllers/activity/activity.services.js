@@ -1,24 +1,4 @@
-
-let mineContract = {
-    "_id": 0,
-    "activityid": 1,
-    "name": 1,
-    "order": 1
-}
-let activityContract = {
-    "_id": 0,
-    "activityid": 1,
-    "name": 1,
-    "description": 1,
-    "tothinks": 1,
-    "order": 1
-}
-let tothinkContract = {
-    "_id": 0,
-    "tothinkid": 1,
-    "name": 1,
-    "order": 1
-}
+const activityResource = require("./activity.resource.json")
 
 module.exports = function checkCreateInputs (activity) {
     /*
@@ -38,18 +18,18 @@ module.exports = function checkCreateInputs (activity) {
     return errors
 }
 module.exports = function getActivityContractForMine () {
-    return mineContract
+    return activityResource.contracts.mine
 }
 module.exports = function getActivityContractForActivity () {
-    return activityContract
+    return activityResource.contracts.activity
 }
 module.exports = function getActivityContractForToThink () {
-    return tothinkContract
+    return activityResource.contracts.tothink
 }
 module.exports = function filterActivity (activity) {
     let filteredActivity = {}
     Object.keys(activity).forEach(key => {
-      if (activityContract[key] === 1) {
+      if (activityResource.contracts.activity[key] === 1) {
         filteredActivity[key] = activity[key]
       }
     })
