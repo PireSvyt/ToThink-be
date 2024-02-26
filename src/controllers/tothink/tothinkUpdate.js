@@ -63,7 +63,7 @@ module.exports = tothinkUpdate = (req, res, next) => {
 
       // Change track
       changeCreate(req, {
-        itemid: tothinkToSave.tothinkid, 
+        itemid: newToThinkState.tothinkid, 
         command: 'create',
         changes: {...requiredToThink}
       })

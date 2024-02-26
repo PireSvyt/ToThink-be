@@ -46,7 +46,7 @@ module.exports = activityUpdate = (req, res, next) => {
 
       // Change track
       changeCreate(req, {
-        itemid: activityToSave.activityid, 
+        itemid: newActivityState.activityid, 
         command: 'create',
         changes: {...requiredActivity}
       })
