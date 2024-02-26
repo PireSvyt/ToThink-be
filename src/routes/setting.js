@@ -9,12 +9,14 @@ const settingCreate = require("../controllers/setting/settingCreate.js");
 const settingUpdate = require("../controllers/setting/settingUpdate.js");
 const settingGetOne = require("../controllers/setting/settingGetOne.js");
 const settingGetMany = require("../controllers/setting/settingGetMany.js");
+const settingGetDefaults = require("../controllers/setting/settingGetDefaults.js");
 const settingDelete = require("../controllers/setting/settingDelete.js");
 
 router.post("/v1/create", authAuthenticate, settingCreate);
 router.post("/v1/update", authAuthenticate, authAuthenticateOwner, settingUpdate);
 router.post("/v1/getone", authAuthenticate, authAuthenticateOwner, settingGetOne);
 router.post("/v1/getmany", authAuthenticate, settingGetMany);
+router.post("/v1/getdefaults", authAuthenticate, settingGetDefaults);
 router.post("/v1/delete", authAuthenticate, authAuthenticateOwner, settingDelete);
 
 module.exports = router;
